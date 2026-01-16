@@ -12,12 +12,17 @@ export interface AuthResponse {
 export interface Project {
     id: number;
     name: string;
-    canvas_data: CanvasItem[]; 
+    canvas_data: CanvasData; 
     is_public: boolean;
     share_token?: string;
     owner_id: number;
     created_at: string;
     updated_at: string;
+}
+
+export interface CanvasData {
+    items: CanvasItem[];
+    [key: string]: any; // Allow future props like background, settings, etc.
 }
 
 export interface CatalogItem {
