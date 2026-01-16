@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { api } from '../../../lib/api';
-import { Project, CatalogItem } from '../../../lib/types';
-import CanvasStage from '../../../components/CanvasStage';
-import InspectorPanel from '../../../components/InspectorPanel';
+import { api } from '@/lib/api';
+import { Project, CatalogItem } from '@/lib/types';
+import CanvasStage from '@/components/CanvasStage';
+import InspectorPanel from '@/components/InspectorPanel';
 import { MessageSquare, Send, CheckCircle } from 'lucide-react';
 
 export default function SharedProjectPage({ params }: { params: { token: string } }) {

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { storage } from './lib/storage';
+import { storage } from '@/lib/storage';
 
 export default function HomePage() {
   const router = useRouter();

@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../../../hooks/useAuth';
-import { useProject } from '../../../../hooks/useProject';
-import { useAutosave } from '../../../../hooks/useAutosave';
-import { api } from '../../../../lib/api';
-import { CatalogItem, CanvasItem } from '../../../../lib/types';
-import TopBar from '../../../../components/TopBar';
-import CatalogSidebar from '../../../../components/CatalogSidebar';
-import CanvasStage from '../../../../components/CanvasStage';
-import InspectorPanel from '../../../../components/InspectorPanel';
-import ShareModal from '../../../../components/ShareModal';
+import { useAuth } from '@/hooks/useAuth';
+import { useProject } from '@/hooks/useProject';
+import { useAutosave } from '@/hooks/useAutosave';
+import { api } from '@/lib/api';
+import { CatalogItem, CanvasItem } from '@/lib/types';
+import TopBar from '@/components/TopBar';
+import CatalogSidebar from '@/components/CatalogSidebar';
+import CanvasStage from '@/components/CanvasStage';
+import InspectorPanel from '@/components/InspectorPanel';
+import ShareModal from '@/components/ShareModal';
 
 export default function EditorPage({ params }: { params: { id: string } }) {
   const { isAuthenticated, logout } = useAuth();
