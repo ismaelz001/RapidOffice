@@ -78,7 +78,7 @@ export default function ProjectsPage() {
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">{p.name}</h3>
                   <div className="bg-primary-50 text-primary-700 px-2 py-1 rounded text-xs font-bold font-mono">
-                    {p.total_cents === 0 ? 'Sin cotizar' : (p.total_cents / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
+                    {(p.total_cents ?? 0) === 0 ? 'Sin cotizar' : ((p.total_cents ?? 0) / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
                   </div>
                 </div>
                 
