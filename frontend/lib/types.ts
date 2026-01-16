@@ -30,7 +30,8 @@ export interface CatalogItem {
     id: string;
     type: string;
     name: string;
-    price: number;
+    price: number; // legacy
+    base_price_cents?: number; // DB field
     image_url?: string;
     width?: number; // legacy/pixel width
     height?: number; // legacy/pixel height
