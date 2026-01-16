@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '../../lib/api';
-import { storage } from '../../lib/storage';
-import { AuthResponse } from '../../lib/types';
+import { api } from '../../../lib/api';
+import { storage } from '../../../lib/storage';
+import { AuthResponse } from '../../../lib/types';
 import Link from 'next/link';
 
 export default function LoginPage() {
