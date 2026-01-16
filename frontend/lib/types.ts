@@ -31,12 +31,12 @@ export interface CatalogItem {
     type: string;
     name: string;
     price: number; // legacy
-    base_price_cents?: number; // DB field
+    base_price_cents: number; // REQUIRED DB field
     image_url?: string;
     width?: number; // legacy/pixel width
     height?: number; // legacy/pixel height
-    width_cm?: number; // physical width
-    depth_cm?: number; // physical depth/height on 2D plane
+    width_cm: number; // REQUIRED physical width
+    depth_cm: number; // REQUIRED physical depth
     height_cm?: number; // physical vertical height
     category?: string;
 }
