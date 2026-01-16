@@ -16,6 +16,7 @@ export interface Project {
     is_public: boolean;
     share_token?: string;
     owner_id: number;
+    total_cents?: number;
     created_at: string;
     updated_at: string;
 }
