@@ -12,7 +12,7 @@ export interface AuthResponse {
 export interface Project {
     id: number;
     name: string;
-    data: any; // JSONb content of the canvas
+    canvas_data: CanvasItem[]; 
     is_public: boolean;
     share_token?: string;
     owner_id: number;
@@ -32,20 +32,13 @@ export interface CatalogItem {
 }
 
 export interface CanvasItem {
-    id: string;
-    type: string; // e.g., 'chair', 'desk', 'rect'
+    instanceId: string;
+    catalogItemId: string;
     x: number;
     y: number;
     rotation: number;
-    scaleX?: number;
-    scaleY?: number;
-    width?: number;
-    height?: number;
-    fill?: string;
-    src?: string; // For images
-    name?: string;
-    price?: number;
-    metadata?: any;
+    // Optional props for backward compat or flexibility if needed
+    [key: string]: any;
 }
 
 export interface CanvasState {
