@@ -1,6 +1,6 @@
 'use client';
 
-import { Save, LogOut, ChevronLeft, Grid, Eye, EyeOff } from 'lucide-react';
+import { Save, LogOut, ChevronLeft, Grid, Eye, EyeOff, Share2 } from 'lucide-react';
 import Link from 'next/link';
 
 interface TopBarProps {
