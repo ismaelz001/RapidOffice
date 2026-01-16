@@ -32,8 +32,11 @@ export interface CatalogItem {
     name: string;
     price: number;
     image_url?: string;
-    width?: number;
-    height?: number;
+    width?: number; // legacy/pixel width
+    height?: number; // legacy/pixel height
+    width_cm?: number; // physical width
+    depth_cm?: number; // physical depth/height on 2D plane
+    height_cm?: number; // physical vertical height
     category?: string;
 }
 
