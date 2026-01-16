@@ -26,3 +26,12 @@ app.include_router(projects.public_share_router, prefix=f"{settings.API_V1_STR}/
 @app.get("/")
 async def root():
     return {"message": "RapidOffice Quote API is running", "docs": "/docs"}
+
+@app.get("/health")
+async def health_check():
+    """Health check to verify if the service is up and DB is configured."""
+    return {
+        "status": "ok",
+        "api_version": settings.VERSION,
+        "database_configured": bool(settings.DATABASE_URL)
+    }
