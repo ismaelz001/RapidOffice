@@ -29,7 +29,7 @@ export const generateQuoteText = (project: Project, catalog: CatalogItem[]) => {
   
   Object.values(groups).forEach(({ item, qty }) => {
     const lineSubtotal = item.base_price_cents * qty;
-    text += `- ${item.name} (${item.brand})\n`;
+    text += `- ${item.name}${item.brand ? ` (${item.brand})` : ''}\n`;
     text += `  Cant: ${qty} x ${formatCurrency(item.base_price_cents)} = ${formatCurrency(lineSubtotal)}\n`;
   });
   

@@ -42,6 +42,7 @@ export interface CatalogItem {
     width_cm: number; // REQUIRED physical width
     depth_cm: number; // REQUIRED physical depth
     height_cm?: number; // physical vertical height
+    brand?: string;
     category?: string;
 }
 
