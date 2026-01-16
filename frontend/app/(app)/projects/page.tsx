@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
-import { Project } from '@/lib/types';
-import { useAuth } from '@/hooks/useAuth';
+import { api } from '../../../lib/api';
+import { Project } from '../../../lib/types';
+import { useAuth } from '../../../hooks/useAuth';
 import { Plus, LayoutGrid, Clock, ArrowRight } from 'lucide-react';
 
 export default function ProjectsPage() {
