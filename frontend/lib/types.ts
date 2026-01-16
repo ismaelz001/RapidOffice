@@ -16,7 +16,11 @@ export interface Project {
     is_public: boolean;
     share_token?: string;
     owner_id: number;
-    total_cents?: number;
+    // Financials
+    subtotal_cents: number;
+    tax_cents: number;
+    total_cents: number;
+    // Timestamps
     created_at: string;
     updated_at: string;
 }
