@@ -41,6 +41,12 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Debug / captura visual
+frontend/intro-opt*.png
+frontend/capture-intros.mjs
+frontend/logo-ofiponiente.png
+frontend/preview-*.html
+
 # IDEs
 .vscode/
 .idea/

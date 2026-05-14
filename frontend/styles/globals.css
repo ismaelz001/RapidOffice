@@ -3,14 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --brand-primary:       #EA43A5;
+  --brand-primary-dark:  #C92E88;
+  --brand-primary-light: #F7C5E3;
+  --neutral-900:         #000000;
+  --neutral-700:         #505050;
+  --neutral-100:         #F5F5F5;
+  --white:               #FFFFFF;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: white;
+  color: var(--neutral-900);
+  background: var(--white);
 }
 
 /* Konva Drag Cursor */
@@ -19,4 +23,19 @@ body {
 }
 .canvas-container canvas {
   outline: none;
+}
+
+/* ── Ofiponiente public landing ── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+/* Custom cursor — only on landing */
+body.landing-page * {
+  cursor: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
 }
