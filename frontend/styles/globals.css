@@ -31,9 +31,11 @@ body {
   100% { transform: translateX(-33.333%); }
 }
 
-/* Custom cursor — only on landing */
-body.landing-page * {
-  cursor: none !important;
+/* Custom cursor — only on landing, only on pointer:fine devices */
+@media (pointer: fine) {
+  body.landing-page * {
+    cursor: none !important;
+  }
 }
 
 html {

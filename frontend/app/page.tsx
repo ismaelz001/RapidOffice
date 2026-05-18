@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -20,10 +21,10 @@ const CATEGORIES = [
 const BRANDS = ['HAWORTH', 'FORMA 5', 'ACTIU', 'SEDUS', 'JG GROUP', 'MEPEL', 'AIC', 'JMM'];
 
 const STATS = [
-  { value: '30+', label: 'Años de\nexperiencia' },
-  { value: '8', label: 'Fabricantes\neuropeos' },
-  { value: '500+', label: 'Proyectos\nrealizados' },
-  { value: '24h', label: 'Respuesta\ngarantizada' },
+  { value: '30+', label: 'Años de\nexperiencia', raw: 30, suffix: '+' },
+  { value: '8', label: 'Fabricantes\neuropeos', raw: 8, suffix: '' },
+  { value: '500+', label: 'Proyectos\nrealizados', raw: 500, suffix: '+', accent: true },
+  { value: '24h', label: 'Respuesta\ngarantizada', raw: 24, suffix: 'h' },
 ];
 
 // ← Cambiar a 2 o 3 para probar otra opción de intro
@@ -41,6 +42,7 @@ export default function OfiponentePage() {
   const heroPanelRef = useRef<HTMLDivElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
   const brandsRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
   const ctaSectionRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -249,6 +251,15 @@ export default function OfiponentePage() {
       );
     }
 
+    // ── SCROLL: GALERÍA ──
+    if (galleryRef.current) {
+      gsap.fromTo(galleryRef.current.querySelectorAll('[data-gallery]'),
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.65, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: galleryRef.current, start: 'top 80%' } }
+      );
+    }
+
     // ── SCROLL: MARCAS ──
     if (brandsRef.current) {
       gsap.fromTo(brandsRef.current.querySelectorAll('[data-brand]'),
@@ -265,6 +276,24 @@ export default function OfiponentePage() {
         { opacity: 1, y: 0, duration: 0.55, stagger: 0.1, ease: 'power2.out',
           scrollTrigger: { trigger: ctaSectionRef.current, start: 'top 70%' } }
       );
+    }
+
+    // ── SCROLL: STATS COUNT-UP ──
+    const nosotrosEl = document.getElementById('nosotros');
+    if (nosotrosEl) {
+      nosotrosEl.querySelectorAll('[data-stat-num]').forEach(el => {
+        const [rawStr, suffix] = (el.getAttribute('data-stat-num') || '').split('|');
+        const target = parseInt(rawStr);
+        if (!target) return;
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: 1.8,
+          ease: 'power3.out',
+          onUpdate() { (el as HTMLElement).textContent = Math.round(obj.val) + suffix; },
+          scrollTrigger: { trigger: nosotrosEl, start: 'top 65%', once: true },
+        });
+      });
     }
 
     // ── PROCESO: auto-play al entrar en viewport ──
@@ -337,11 +366,13 @@ export default function OfiponentePage() {
         {/* ══ OPCIÓN 1: Blueprint Room — imagen fondo + Ken Burns ══ */}
         {INTRO_STYLE === 1 && (
           <div ref={introBgRef} className="absolute inset-0 z-[1] overflow-hidden">
-            <img
+            <Image
               src="/imgs/proceso/p6.png"
               alt=""
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
               style={{ transform: 'scale(1)', transformOrigin: 'center center' }}
+              priority
             />
             <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.84)' }} />
           </div>
@@ -361,7 +392,7 @@ export default function OfiponentePage() {
                 className="relative overflow-hidden"
                 style={{ clipPath: 'inset(100% 0 0 0)' }}
               >
-                <img src={src} alt="" className="w-full h-full object-cover" style={{ opacity: 0.5 }} />
+                <Image src={src} alt="" fill className="object-cover" style={{ opacity: 0.5 }} sizes="34vw" />
                 <div className="absolute inset-0 bg-black/35" />
               </div>
             ))}
@@ -372,10 +403,12 @@ export default function OfiponentePage() {
         {INTRO_STYLE === 3 && (
           <>
             <div ref={introBgRef} className="absolute inset-0 z-[1] overflow-hidden">
-              <img
+              <Image
                 src="/imgs/proceso/p9.png"
                 alt=""
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                priority
               />
               <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.82)' }} />
             </div>
@@ -423,7 +456,7 @@ export default function OfiponentePage() {
             className="bg-white px-7 py-3.5 opacity-0"
             style={{ borderRadius: '2px' }}
           >
-            <img src="/logo.png" alt="Ofiponiente" className="h-11 w-auto" />
+            <Image src="/logo.png" alt="Ofiponiente" width={120} height={44} className="h-11 w-auto" style={{ width: 'auto' }} />
           </div>
 
           {/* Tagline */}
@@ -496,7 +529,7 @@ export default function OfiponentePage() {
           className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-12 h-16 border-b border-ofi-black/10 bg-ofi-white/95 backdrop-blur-sm opacity-0"
         >
           <a href="/" className="flex-shrink-0">
-            <img src="/logo.png" alt="Ofiponiente" className="h-10 w-auto" />
+            <Image src="/logo.png" alt="Ofiponiente" width={120} height={40} className="h-10 w-auto" priority />
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-ofi-gray">
             <a href="#categorias" className="hover:text-ofi-black transition-colors">Catálogo</a>
@@ -517,22 +550,23 @@ export default function OfiponentePage() {
           className="min-h-[100dvh] grid grid-cols-1 lg:grid-cols-[1fr_42%] border-b border-ofi-black/10 pt-16"
         >
           {/* Left: text */}
-          <div className="flex flex-col justify-center px-8 md:px-14 py-16 lg:py-0 border-r border-ofi-black/10">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase mb-8 px-3 py-1.5 bg-ofi-pink-light text-ofi-pink-dark border border-ofi-pink/30">
-              El Ejido · Almería · Desde 1994
+          <div className="flex flex-col justify-center px-8 md:px-14 py-16 lg:py-0 border-r border-ofi-black/10 order-2 lg:order-1">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase mb-8 text-ofi-gray">
+              <span className="w-6 h-px bg-ofi-pink inline-block" />
+              España · Desde 1994
             </p>
 
             <h1 className="font-clash font-bold leading-[0.95] tracking-tight mb-8" style={{ fontSize: 'clamp(3rem, 7vw, 6rem)' }}>
-              <div ref={line1Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)' }}>Espacios</div>
-              <div ref={line2Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', color: 'transparent', WebkitTextStroke: '1.5px #0B0B0B' }}>de trabajo</div>
-              <div ref={line3Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)' }}>
+              <div ref={line1Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>Espacios</div>
+              <div ref={line2Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', color: 'transparent', WebkitTextStroke: '1.5px #0B0B0B', willChange: 'clip-path' }}>de trabajo</div>
+              <div ref={line3Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>
                 que <span className="text-ofi-pink">inspiran.</span>
               </div>
             </h1>
 
             <p ref={subtitleRef} className="text-base md:text-lg text-ofi-gray leading-relaxed max-w-md mb-10 opacity-0">
               Distribuidor oficial de las mejores marcas europeas de mobiliario de oficina.
-              Diseñamos y equipamos espacios de trabajo en Almería desde hace 30 años.
+              Diseñamos y equipamos espacios de trabajo para empresas en toda España.
             </p>
 
             <div ref={ctaBtnsRef} className="flex flex-wrap gap-4 mb-12 opacity-0">
@@ -569,17 +603,22 @@ export default function OfiponentePage() {
             </div>
           </div>
 
-          {/* Right: hero photo */}
+          {/* Right: hero video */}
           <div
             ref={heroPanelRef}
-            className="hidden lg:block relative overflow-hidden"
-            style={{ clipPath: 'inset(0% 100% 0% 0%)' }}
+            className="relative overflow-hidden order-1 lg:order-2 h-[260px] sm:h-[320px] lg:h-auto"
+            style={{ clipPath: 'inset(0% 100% 0% 0%)', willChange: 'clip-path' }}
           >
-            <img
-              src="/imgs/office-hero.jpg"
-              alt="Oficina moderna equipada por Ofiponiente"
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/imgs/executive-office.jpg"
               className="absolute inset-0 w-full h-full object-cover"
-            />
+            >
+              <source src="/videos/extensa.mp4" type="video/mp4" />
+            </video>
             {/* Gradient overlay bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-ofi-black/60 via-transparent to-transparent" />
             {/* Badge bottom-left */}
@@ -678,6 +717,17 @@ export default function OfiponentePage() {
                 ))}
               </div>
 
+              {/* CTA inline proceso */}
+              <a
+                href="#contacto"
+                className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-ofi-pink/70 hover:text-ofi-pink transition-colors duration-200"
+              >
+                Solicitar presupuesto sin compromiso
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <path d="M1 6h10M6 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+
             </div>
           </div>
         </div>
@@ -688,13 +738,14 @@ export default function OfiponentePage() {
             <p className="text-xs font-semibold tracking-[0.2em] text-ofi-pink uppercase">Espacios que equipamos</p>
             <p className="font-clash font-bold text-white text-2xl md:text-3xl">Cada proyecto, único.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <div ref={galleryRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {[
               { src: '/imgs/executive-office.jpg', label: 'Dirección' },
               { src: '/imgs/chair.jpg',            label: 'Sillería' },
               { src: '/imgs/meeting-room.jpg',     label: 'Salas de reuniones' },
               { src: '/imgs/archive.jpg',          label: 'Archivo' },
               { src: '/imgs/divisions.jpg',        label: 'Divisiones' },
+              { src: '/imgs/despacho.png',         label: 'Despachos' },
             ].map((item, i) => (
               <div
                 key={i}
@@ -702,10 +753,12 @@ export default function OfiponentePage() {
                 className="relative overflow-hidden group"
                 style={{ aspectRatio: '3/4' }}
               >
-                <img
+                <Image
                   src={item.src}
                   alt={item.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 17vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 <div className="absolute bottom-4 left-4 z-10">
@@ -740,9 +793,9 @@ export default function OfiponentePage() {
                 <span className="block text-xs font-mono text-ofi-gray group-hover:text-ofi-pink-dark mb-4 transition-colors">{cat.num}</span>
                 <h3 className="font-clash font-bold text-xl mb-2 group-hover:text-ofi-white transition-colors">{cat.title}</h3>
                 <p className="text-sm text-ofi-gray group-hover:text-white/50 transition-colors">{cat.sub}</p>
-                <div className="mt-6 flex items-center gap-2 text-xs font-semibold opacity-0 group-hover:opacity-100 text-ofi-pink transition-opacity duration-200">
+                <div className="mt-6 flex items-center gap-2 text-xs font-semibold opacity-40 group-hover:opacity-100 text-ofi-pink transition-all duration-200">
                   Ver productos
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="translate-x-0 group-hover:translate-x-1 transition-transform duration-200">
                     <path d="M1 6h10M6 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
@@ -789,16 +842,20 @@ export default function OfiponentePage() {
             <h2 className="font-clash font-bold leading-tight mb-6" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
               Tres décadas<br />
               <span style={{ color: 'transparent', WebkitTextStroke: '1.5px #0B0B0B' }}>equipando</span><br />
-              Almería.
+              España.
             </h2>
             <p className="text-ofi-gray leading-relaxed max-w-md">
-              Desde 1994 somos el referente de mobiliario de oficina en la provincia de Almería. Distribuimos marcas europeas de primer nivel con asesoramiento personalizado, servicio de diseño de espacios y montaje incluido.
+              Desde 1994 somos referente nacional en mobiliario de oficina para empresas. Distribuimos marcas europeas de primer nivel con asesoramiento personalizado, servicio de diseño de espacios y montaje incluido en toda España.
             </p>
           </div>
           <div className="grid grid-cols-2">
             {STATS.map((s, i) => (
               <div key={i} className="border-r border-b border-ofi-black/10 p-10 flex flex-col justify-end last:border-r-0 [&:nth-child(2n)]:border-r-0">
-                <div className="font-clash font-bold mb-2" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
+                <div
+                  data-stat-num={`${s.raw}|${s.suffix}`}
+                  className={`font-clash font-bold mb-2 ${s.accent ? 'text-ofi-pink' : ''}`}
+                  style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}
+                >
                   {s.value}
                 </div>
                 <p className="text-sm text-ofi-gray whitespace-pre-line">{s.label}</p>
@@ -819,29 +876,42 @@ export default function OfiponentePage() {
             <p data-cta className="text-white/50 text-sm leading-relaxed max-w-sm">
               Cuéntanos tu proyecto. Te preparamos un presupuesto detallado sin compromiso, con los mejores materiales y fabricantes europeos.
             </p>
+            <ul data-cta className="mt-6 flex flex-col gap-2.5">
+              {['Sin compromiso · Respuesta en 24h', 'Montaje incluido en toda España', 'Distribuidores oficiales de 8 marcas europeas'].map(item => (
+                <li key={item} className="flex items-center gap-2.5 text-xs text-white/35">
+                  <span className="w-1 h-1 rounded-full bg-ofi-pink shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
           {/* Right: off-white form */}
           <div className="bg-ofi-offwhite px-8 md:px-14 py-16 flex flex-col justify-center">
             <form className="flex flex-col gap-4 max-w-sm w-full" onSubmit={e => e.preventDefault()}>
               <div data-cta className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Nombre</label>
+                <label htmlFor="contact-name" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Nombre</label>
                 <input
+                  id="contact-name"
                   type="text"
                   placeholder="Tu nombre o empresa"
+                  autoComplete="name"
                   className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors"
                 />
               </div>
               <div data-cta className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Email</label>
+                <label htmlFor="contact-email" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Email</label>
                 <input
+                  id="contact-email"
                   type="email"
                   placeholder="correo@empresa.com"
+                  autoComplete="email"
                   className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors"
                 />
               </div>
               <div data-cta className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Mensaje</label>
+                <label htmlFor="contact-message" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Mensaje</label>
                 <textarea
+                  id="contact-message"
                   rows={3}
                   placeholder="Describe brevemente tu proyecto..."
                   className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors resize-none"
@@ -864,8 +934,8 @@ export default function OfiponentePage() {
         {/* ── FOOTER ── */}
         <footer className="px-8 md:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-ofi-black/10">
           <div>
-            <img src="/logo.png" alt="Ofiponiente" className="h-10 w-auto mb-2" />
-            <p className="text-sm text-ofi-gray">Mobiliario de oficina · El Ejido, Almería</p>
+            <Image src="/logo.png" alt="Ofiponiente" width={120} height={40} className="h-10 w-auto mb-2" style={{ width: 'auto' }} />
+            <p className="text-sm text-ofi-gray">Mobiliario de oficina · España</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-xs font-semibold tracking-wider text-ofi-gray uppercase mb-2">Contacto</p>
@@ -882,7 +952,7 @@ export default function OfiponentePage() {
         </footer>
         <div className="px-8 md:px-12 py-4 flex items-center justify-between text-xs text-ofi-gray/40 border-t border-ofi-black/5">
           <span>© 2026 Ofiponiente S.L. — Distribuidores oficiales desde 1994</span>
-          <span>El Ejido · Almería</span>
+          <span>Distribuidores oficiales en toda España</span>
         </div>
 
       </div>

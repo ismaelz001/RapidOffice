@@ -4,9 +4,15 @@ import { DM_Sans } from 'next/font/google';
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' });
 
 export const metadata = {
-  title: 'Ofiponiente — Mobiliario de Oficina en Almería',
-  description: 'Distribuidor oficial de mobiliario de oficina premium en El Ejido, Almería. Haworth, Forma 5, Actiu, Sedus. Más de 30 años equipando espacios de trabajo.',
-  keywords: 'mobiliario oficina Almería, equipamiento oficinas El Ejido, distribuidor Haworth Almería, sillería ergonómica Almería',
+  metadataBase: new URL('https://ofiponiente.rodorte.com'),
+  title: 'Ofiponiente — Mobiliario de Oficina para Empresas',
+  description: 'Distribuidor oficial de mobiliario de oficina premium para empresas en toda España. Haworth, Forma 5, Actiu, Sedus. Más de 30 años equipando espacios de trabajo.',
+  keywords: 'mobiliario oficina empresas, equipamiento oficinas España, distribuidor Haworth España, sillería ergonómica oficina, mobiliario corporativo',
+  openGraph: {
+    title: 'Ofiponiente — Mobiliario de Oficina para Empresas',
+    description: 'Distribuidor oficial de mobiliario de oficina premium para empresas en toda España.',
+    locale: 'es_ES',
+  },
 };
 
 export default function RootLayout({
