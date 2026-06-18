@@ -14,6 +14,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+!frontend/lib/
+!frontend/lib/**
 parts/
 sdist/
 var/
@@ -52,3 +54,5 @@ frontend/preview-*.html
 .idea/
 *.swp
 *.swo
+.vercel
+.env*.local
