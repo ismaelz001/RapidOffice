@@ -39,7 +39,7 @@ export default function OfiponentePage() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaBtnsRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
-  const heroPanelRef = useRef<HTMLDivElement>(null);
+  const heroPanelRef = useRef<HTMLVideoElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
   const brandsRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -237,9 +237,9 @@ export default function OfiponentePage() {
         '-=0.1'
       )
       .fromTo(heroPanelRef.current,
-        { clipPath: 'inset(0% 100% 0% 0%)' },
-        { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'power3.inOut' },
-        0.2
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: 'power2.inOut' },
+        0
       );
 
     // ── SCROLL: CATEGORÍAS ──
@@ -547,32 +547,50 @@ export default function OfiponentePage() {
         {/* ── HERO ── */}
         <section
           ref={heroRef}
-          className="min-h-[100dvh] grid grid-cols-1 lg:grid-cols-[1fr_42%] border-b border-ofi-black/10 pt-16"
+          className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-ofi-black border-b border-white/10 pt-16"
         >
-          {/* Left: text */}
-          <div className="flex flex-col justify-center px-8 md:px-14 py-16 lg:py-0 border-r border-ofi-black/10 order-2 lg:order-1">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase mb-8 text-ofi-gray">
+          {/* Background video — fullscreen */}
+          <video
+            ref={heroPanelRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/imgs/executive-office.jpg"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ willChange: 'opacity' }}
+          >
+            <source src="/videos/extensa.mp4" type="video/mp4" />
+          </video>
+
+          {/* Gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+
+          {/* Content */}
+          <div className="relative z-10 flex-1 flex flex-col justify-center px-8 md:px-14 lg:px-16 py-20">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase mb-8 text-white/50">
               <span className="w-6 h-px bg-ofi-pink inline-block" />
               España · Desde 1994
             </p>
 
             <h1 className="font-clash font-bold leading-[0.95] tracking-tight mb-8" style={{ fontSize: 'clamp(3rem, 7vw, 6rem)' }}>
-              <div ref={line1Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>Espacios</div>
-              <div ref={line2Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', color: 'transparent', WebkitTextStroke: '1.5px #0B0B0B', willChange: 'clip-path' }}>de trabajo</div>
-              <div ref={line3Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>
+              <div ref={line1Ref} className="text-ofi-white" style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>Espacios</div>
+              <div ref={line2Ref} style={{ clipPath: 'inset(100% 0% 0% 0%)', color: 'transparent', WebkitTextStroke: '1.5px rgba(255,255,255,0.4)', willChange: 'clip-path' }}>de trabajo</div>
+              <div ref={line3Ref} className="text-ofi-white" style={{ clipPath: 'inset(100% 0% 0% 0%)', willChange: 'clip-path' }}>
                 que <span className="text-ofi-pink">inspiran.</span>
               </div>
             </h1>
 
-            <p ref={subtitleRef} className="text-base md:text-lg text-ofi-gray leading-relaxed max-w-md mb-10 opacity-0">
+            <p ref={subtitleRef} className="text-base md:text-lg text-white/60 leading-relaxed max-w-md mb-10 opacity-0">
               Distribuidor oficial de las mejores marcas europeas de mobiliario de oficina.
               Diseñamos y equipamos espacios de trabajo para empresas en toda España.
             </p>
 
-            <div ref={ctaBtnsRef} className="flex flex-wrap gap-4 mb-12 opacity-0">
+            <div ref={ctaBtnsRef} className="flex flex-wrap gap-4 opacity-0">
               <a
                 href="#contacto"
-                className="inline-flex items-center gap-3 bg-ofi-black text-ofi-white font-semibold text-sm px-7 py-3.5 hover:bg-ofi-pink-dark transition-colors duration-200"
+                className="inline-flex items-center gap-3 bg-ofi-white text-ofi-black font-semibold text-sm px-7 py-3.5 hover:bg-ofi-pink hover:text-white transition-colors duration-200"
               >
                 Solicitar presupuesto
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -581,52 +599,23 @@ export default function OfiponentePage() {
               </a>
               <a
                 href="#categorias"
-                className="inline-flex items-center gap-3 border border-ofi-black text-ofi-black font-semibold text-sm px-7 py-3.5 hover:border-ofi-pink-dark hover:text-ofi-pink-dark transition-colors duration-200"
+                className="inline-flex items-center gap-3 border border-white/40 text-white font-semibold text-sm px-7 py-3.5 hover:border-ofi-pink hover:text-ofi-pink transition-colors duration-200"
               >
                 Ver catálogo
               </a>
             </div>
-
-            {/* Stats */}
-            <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-0 border-t border-ofi-black/10 opacity-0">
-              {STATS.map((s, i) => (
-                <div
-                  key={i}
-                  className="py-5 pr-6 border-r border-ofi-black/10 last:border-r-0"
-                >
-                  <div className="font-clash font-bold text-2xl md:text-3xl mb-1">
-                    {s.value}
-                  </div>
-                  <div className="text-xs text-ofi-gray leading-tight whitespace-pre-line">{s.label}</div>
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Right: hero video */}
-          <div
-            ref={heroPanelRef}
-            className="relative overflow-hidden order-1 lg:order-2 h-[260px] sm:h-[320px] lg:h-auto"
-            style={{ clipPath: 'inset(0% 100% 0% 0%)', willChange: 'clip-path' }}
-          >
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/imgs/executive-office.jpg"
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src="/videos/extensa.mp4" type="video/mp4" />
-            </video>
-            {/* Gradient overlay bottom */}
-            <div className="absolute inset-0 bg-gradient-to-t from-ofi-black/60 via-transparent to-transparent" />
-            {/* Badge bottom-left */}
-            <div className="absolute bottom-8 left-8 z-10">
-              <p className="text-white/60 text-xs tracking-widest uppercase font-semibold">
-                Diseño · Suministro · Instalación
-              </p>
-            </div>
+          {/* Stats strip — bottom of hero */}
+          <div ref={statsRef} className="relative z-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10 opacity-0">
+            {STATS.map((s, i) => (
+              <div key={i} className="py-5 px-6">
+                <div className={`font-clash font-bold text-2xl md:text-3xl mb-1 ${s.accent ? 'text-ofi-pink' : 'text-ofi-white'}`}>
+                  {s.value}
+                </div>
+                <div className="text-xs text-white/40 leading-tight whitespace-pre-line">{s.label}</div>
+              </div>
+            ))}
           </div>
         </section>
 

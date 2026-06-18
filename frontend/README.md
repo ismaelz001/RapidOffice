@@ -39,3 +39,10 @@ Este es el frontend de RapidOffice, construido con Next.js 14 y react-konva para
 - **Drag & Drop:** Integración nativa del navegador con Konva.
 - **Autosave:** Cada 5 segundos si hay cambios detectados.
 - **Pricing:** El resumen del panel derecho muestra los datos recalculados por el backend.
+- **Cookies:** Banner global de consentimiento + política en `/cookies`.
+
+## Cookies (Rodorte Base)
+- Componente global: `components/CookieConsentBanner.tsx`
+- Persistencia: `lib/cookie-consent.ts`
+- Política legal: `app/cookies/page.tsx`
+- Plantilla reusable para futuros proyectos: `COOKIE_TEMPLATE_RODORTE.md`

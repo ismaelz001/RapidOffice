@@ -1,5 +1,6 @@
-import '../styles/globals.css';
 import { DM_Sans } from 'next/font/google';
+import CookieConsentBanner from '../components/CookieConsentBanner';
+import '../styles/globals.css';
 
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' });
 
@@ -33,7 +34,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Righteous&display=swap"
         />
       </head>
-      <body className={dmSans.className}>{children}</body>
+      <body className={dmSans.className}>
+        {children}
+        <CookieConsentBanner />
+      </body>
     </html>
   );
 }
