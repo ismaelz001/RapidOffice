@@ -1,9 +1,9 @@
 ﻿'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -936,7 +936,13 @@ export default function OfiponentePage() {
             <p className="text-xs font-semibold tracking-wider text-ofi-gray uppercase mb-2">Legal</p>
             <a href="#" className="text-sm text-ofi-gray hover:text-ofi-black transition-colors">Aviso legal</a>
             <a href="#" className="text-sm text-ofi-gray hover:text-ofi-black transition-colors">Política de privacidad</a>
-            <a href="/login" className="text-sm text-ofi-gray/30 hover:text-ofi-gray transition-colors text-xs mt-4">Acceso gestor →</a>
+            <a
+              href="/login"
+              className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-ofi-black px-4 py-2.5 text-sm font-semibold text-ofi-white transition hover:bg-ofi-pink-dark"
+            >
+              Acceso CRM
+              <span aria-hidden="true">→</span>
+            </a>
           </div>
         </footer>
         <div className="px-8 md:px-12 py-4 flex items-center justify-between text-xs text-ofi-gray/40 border-t border-ofi-black/5">
