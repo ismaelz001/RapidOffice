@@ -536,12 +536,20 @@ export default function OfiponentePage() {
             <a href="#marcas" className="hover:text-ofi-black transition-colors">Marcas</a>
             <a href="#nosotros" className="hover:text-ofi-black transition-colors">Nosotros</a>
           </div>
-          <a
-            href="#contacto"
-            className="text-sm font-semibold bg-ofi-black text-ofi-white px-5 py-2 hover:bg-ofi-pink-dark transition-colors duration-200"
-          >
-            Presupuesto
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href="/login"
+              className="text-sm font-semibold border border-ofi-black/15 px-4 py-2 text-ofi-black transition-colors duration-200 hover:border-ofi-pink hover:text-ofi-pink-dark"
+            >
+              Acceso<span className="hidden sm:inline"> CRM</span>
+            </a>
+            <a
+              href="#contacto"
+              className="text-sm font-semibold bg-ofi-black text-ofi-white px-4 py-2 hover:bg-ofi-pink-dark transition-colors duration-200 sm:px-5"
+            >
+              Presupuesto
+            </a>
+          </div>
         </nav>
 
         {/* ── HERO ── */}
