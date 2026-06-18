@@ -14,6 +14,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+!planificacion-de-oficinas/src/lib/
+!planificacion-de-oficinas/src/lib/**
 parts/
 sdist/
 var/
