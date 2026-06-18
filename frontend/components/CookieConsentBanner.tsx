@@ -1,8 +1,8 @@
 'use client';
 
-import { getCookieConsent, setCookieConsent, type CookieConsentChoice } from '@/lib/cookie-consent';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { getCookieConsent, setCookieConsent, type CookieConsentChoice } from '../lib/cookie-consent';
 
 export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
