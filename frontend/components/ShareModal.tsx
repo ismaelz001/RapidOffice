@@ -56,10 +56,10 @@ export default function ShareModal({ token, onClose }: ShareModalProps) {
             </button>
           </div>
 
-          <div className="flex gap-3">
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
             <button 
               onClick={copyLink}
-              className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl font-bold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+              className="bg-primary-600 text-white py-2.5 px-4 rounded-xl font-bold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
             >
               <Copy size={18} /> {copied ? '¡Copiado!' : 'Copiar enlace'}
             </button>
@@ -70,6 +70,12 @@ export default function ShareModal({ token, onClose }: ShareModalProps) {
               className="bg-gray-100 text-gray-700 py-2.5 px-4 rounded-xl font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
             >
               <ExternalLink size={18} /> Abrir
+            </a>
+            <a
+              href="/login"
+              className="border border-primary-200 bg-white px-4 py-2.5 text-center font-bold text-primary-700 transition-colors hover:border-primary-500 hover:bg-primary-50 rounded-xl"
+            >
+              Acceso CRM
             </a>
           </div>
         </div>

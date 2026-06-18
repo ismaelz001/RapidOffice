@@ -74,12 +74,20 @@ export default function SharedProjectPage({ params }: { params: { token: string 
           <h1 className="font-bold text-lg leading-none">{project.name}</h1>
           <p className="text-xs text-primary-400 mt-1 uppercase tracking-widest">Propuesta RapidOffice</p>
         </div>
-        <button 
-          onClick={() => setShowContact(true)}
-          className="bg-white text-primary-900 px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-50 transition-colors"
-        >
-          <MessageSquare size={18} /> Pedir cambios
-        </button>
+        <div className="flex items-center gap-3">
+          <a
+            href="/login"
+            className="border border-white/20 px-5 py-2 rounded-xl font-bold text-white transition-colors hover:bg-white/10"
+          >
+            Acceso CRM
+          </a>
+          <button
+            onClick={() => setShowContact(true)}
+            className="bg-white text-primary-900 px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-50 transition-colors"
+          >
+            <MessageSquare size={18} /> Pedir cambios
+          </button>
+        </div>
       </header>
 
       <div className="flex-1 flex overflow-hidden">
