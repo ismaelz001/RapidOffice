@@ -531,8 +531,9 @@ export default function OfiponentePage() {
           <a href="/" className="flex-shrink-0">
             <Image src="/logo.png" alt="Ofiponiente" width={120} height={40} className="h-10 w-auto" priority />
           </a>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-ofi-gray">
+          <div className="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-ofi-gray">
             <a href="#categorias" className="hover:text-ofi-black transition-colors">Catálogo</a>
+            <a href="#contacto" className="hover:text-ofi-pink-dark transition-colors">Reacondicionado</a>
             <a href="#marcas" className="hover:text-ofi-black transition-colors">Marcas</a>
             <a href="#nosotros" className="hover:text-ofi-black transition-colors">Nosotros</a>
           </div>
@@ -547,7 +548,8 @@ export default function OfiponentePage() {
               href="#contacto"
               className="text-sm font-semibold bg-ofi-black text-ofi-white px-4 py-2 hover:bg-ofi-pink-dark transition-colors duration-200 sm:px-5"
             >
-              Presupuesto
+              <span className="hidden xl:inline">Planifica tu espacio de trabajo</span>
+              <span className="xl:hidden">Planifica tu espacio</span>
             </a>
           </div>
         </nav>
@@ -600,7 +602,7 @@ export default function OfiponentePage() {
                 href="#contacto"
                 className="inline-flex items-center gap-3 bg-ofi-white text-ofi-black font-semibold text-sm px-7 py-3.5 hover:bg-ofi-pink hover:text-white transition-colors duration-200"
               >
-                Solicitar presupuesto
+                Planifica tu espacio de trabajo
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
