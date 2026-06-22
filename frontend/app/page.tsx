@@ -545,7 +545,7 @@ export default function OfiponentePage() {
               Acceso<span className="hidden sm:inline"> CRM</span>
             </a>
             <a
-              href="#contacto"
+              href="/planifica-tu-espacio/"
               className="text-sm font-semibold bg-ofi-black text-ofi-white px-4 py-2 hover:bg-ofi-pink-dark transition-colors duration-200 sm:px-5"
             >
               <span className="hidden xl:inline">Planifica tu espacio de trabajo</span>
@@ -599,7 +599,7 @@ export default function OfiponentePage() {
 
             <div ref={ctaBtnsRef} className="flex flex-wrap gap-4 opacity-0">
               <a
-                href="#contacto"
+                href="/planifica-tu-espacio/"
                 className="inline-flex items-center gap-3 bg-ofi-white text-ofi-black font-semibold text-sm px-7 py-3.5 hover:bg-ofi-pink hover:text-white transition-colors duration-200"
               >
                 Planifica tu espacio de trabajo
