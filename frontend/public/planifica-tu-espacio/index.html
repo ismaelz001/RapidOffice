@@ -96,6 +96,19 @@
       transition: all .2s; letter-spacing: .02em;
     }
     .save-btn:hover { color: var(--pink); border-color: rgba(234,67,165,.4); }
+    .home-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted); text-decoration: none;
+      padding: 6px 12px;
+      border: 1px solid var(--border); border-radius: 4px;
+      transition: all .2s; letter-spacing: .02em;
+    }
+    .home-link:hover { color: var(--pink); border-color: rgba(234,67,165,.4); }
+    .portal-home-link {
+      margin-top: 16px;
+      border-color: transparent;
+      justify-content: center;
+    }
 
     /* ── PROGRESS BAR ───────────────────────────────────────── */
     .progress-wrap {
@@ -702,6 +715,7 @@
         Configura tu oficina
         <span class="arrow">→</span>
       </button>
+      <a class="home-link portal-home-link" href="/">← Volver a Ofiponiente</a>
       <div class="portal-proof">Más de 200 oficinas equipadas en Galicia</div>
     </div>
   </div>
@@ -714,6 +728,7 @@
       <img src="/logo.png" alt="Ofiponiente" />
     </div>
     <div class="topbar-right">
+      <a class="home-link" href="/">← Volver a Ofiponiente</a>
       <button class="save-btn" onclick="saveProgress()">Guardar y continuar después</button>
     </div>
   </div>
@@ -1296,6 +1311,12 @@ function updatePrices() {
   document.getElementById('res-premium').textContent  = fmt(p);
 }
 
+function syncPriceVisibility(step) {
+  const ticker = document.getElementById('price-ticker');
+  if (!ticker) return;
+  ticker.style.display = step >= 6 ? 'flex' : 'none';
+}
+
 /* ══════════════════════════════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════════════════════════════ */
@@ -1306,7 +1327,7 @@ function startConfigurator() {
   document.getElementById('screen-0').classList.remove('active');
   document.getElementById('topbar').style.display = 'flex';
   document.getElementById('progress-wrap').style.display = 'block';
-  document.getElementById('price-ticker').style.display = 'flex';
+  document.getElementById('price-ticker').style.display = 'none';
   goNext(1);
 }
 
@@ -1321,6 +1342,7 @@ function goNext(step) {
 
   updateProgress(step);
   updatePrices();
+  syncPriceVisibility(step);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   // Save to localStorage

@@ -8,14 +8,14 @@ import { useEffect, useRef } from 'react';
 gsap.registerPlugin(ScrollTrigger);
 
 const CATEGORIES = [
-  { num: '01', title: 'Mobiliario', sub: 'Mesas · Escritorios · Sistemas' },
-  { num: '02', title: 'Sillería', sub: 'Dirección · Operativa · Visitas' },
-  { num: '03', title: 'Colectividades', sub: 'Salas · Formación · Espera' },
-  { num: '04', title: 'Archivo', sub: 'Armarios · Cajoneras · Archivadores' },
-  { num: '05', title: 'Divisiones', sub: 'Mamparas · Paneles · Separadores' },
-  { num: '06', title: 'Complementos', sub: 'Accesorios · Iluminación · Textil' },
-  { num: '07', title: 'Bibliotecas', sub: 'Estanterías · Módulos · Sistemas' },
-  { num: '08', title: 'Exterior', sub: 'Terraza · Jardín · Zonas comunes' },
+  { num: '01', title: 'Sillas', sub: 'Dirección · Operativa · Visitas', href: '/mobiliario/sillas' },
+  { num: '02', title: 'Mesas y escritorios', sub: 'Puestos · Dirección · Sistemas', href: '/mobiliario/mesas-escritorios' },
+  { num: '03', title: 'Salas y colectividades', sub: 'Reunión · Formación · Espera', href: '/mobiliario/salas-colectividades' },
+  { num: '04', title: 'Almacenaje y archivo', sub: 'Armarios · Cajoneras · Archivadores', href: '/mobiliario/almacenaje-archivo' },
+  { num: '05', title: 'Divisiones', sub: 'Mamparas · Paneles · Separadores', href: '/mobiliario/divisiones' },
+  { num: '06', title: 'Complementos', sub: 'Accesorios · Iluminación · Textil', href: '/mobiliario/complementos' },
+  { num: '07', title: 'Reacondicionado', sub: 'Stock · Ahorro · Disponibilidad', href: '/mobiliario/reacondicionado' },
+  { num: '08', title: 'Todo el catálogo', sub: 'Nuevo · Reacondicionado · Packs', href: '/mobiliario' },
 ];
 
 const BRANDS = ['HAWORTH', 'FORMA 5', 'ACTIU', 'SEDUS', 'JG GROUP', 'MEPEL', 'AIC', 'JMM'];
@@ -533,7 +533,7 @@ export default function OfiponentePage() {
           </a>
           <div className="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-ofi-gray">
             <a href="#categorias" className="hover:text-ofi-black transition-colors">Catálogo</a>
-            <a href="#contacto" className="hover:text-ofi-pink-dark transition-colors">Reacondicionado</a>
+            <a href="/mobiliario/reacondicionado" className="hover:text-ofi-pink-dark transition-colors">Reacondicionado</a>
             <a href="#marcas" className="hover:text-ofi-black transition-colors">Marcas</a>
             <a href="#nosotros" className="hover:text-ofi-black transition-colors">Nosotros</a>
           </div>
@@ -784,8 +784,9 @@ export default function OfiponentePage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
           >
             {CATEGORIES.map((cat, i) => (
-              <div
+              <a
                 key={i}
+                href={cat.href}
                 data-cat
                 className="group border-r border-b border-ofi-black/10 p-8 cursor-pointer transition-colors duration-200 hover:bg-ofi-black last:border-r-0 [&:nth-child(4n)]:border-r-0"
               >
@@ -798,7 +799,7 @@ export default function OfiponentePage() {
                     <path d="M1 6h10M6 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </section>

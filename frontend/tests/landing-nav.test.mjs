@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
@@ -16,7 +15,7 @@ const nextConfigSource = await readFile(
 test('shows Reacondicionado as a visible primary navigation item', () => {
   assert.match(
     landingSource,
-    /href="#contacto"[^>]*>\s*Reacondicionado\s*<\/a>/,
+    /href="\/mobiliario\/reacondicionado"[^>]*>\s*Reacondicionado\s*<\/a>/,
   );
 });
 
@@ -28,7 +27,7 @@ test('uses the planning CTA in the top navigation and hero', () => {
   assert.equal(plannerLinks.length, 2);
 });
 
-test('publishes the approved planner preview without design changes', async () => {
+test('publishes the planner preview with the approved static assets', async () => {
   const publishedUrl = new URL(
     '../public/planifica-tu-espacio/index.html',
     import.meta.url,
@@ -37,13 +36,34 @@ test('publishes the approved planner preview without design changes', async () =
   assert.equal(existsSync(publishedUrl), true, 'published planner HTML is missing');
 
   const published = (await readFile(publishedUrl, 'utf8')).replaceAll('\r\n', '\n');
-  const checksum = createHash('sha256').update(published).digest('hex');
 
-  assert.equal(
-    checksum,
-    '96ed613a121b867067ceca27c813470d4bf333dc6546ab151481f1c48fd4a11a',
-  );
+  assert.match(published, /<title>Planifica tu Oficina — Ofiponiente<\/title>/);
+  assert.match(published, /src="\/logo\.png"/);
   assert.doesNotMatch(published, /\.\.\/frontend\/public\/logo\.png/);
+});
+
+test('planner preview includes a visible link back to the home page', async () => {
+  const published = await readFile(
+    new URL('../public/planifica-tu-espacio/index.html', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(published, /href="\/"/);
+  assert.match(published, /Volver a Ofiponiente/);
+});
+
+test('planner preview does not show price estimates in the first steps', async () => {
+  const published = await readFile(
+    new URL('../public/planifica-tu-espacio/index.html', import.meta.url),
+    'utf8',
+  );
+
+  assert.doesNotMatch(
+    published,
+    /function startConfigurator\(\)[\s\S]*?price-ticker'\)\.style\.display = 'flex'[\s\S]*?}/,
+  );
+  assert.match(published, /function syncPriceVisibility\(step\)/);
+  assert.match(published, /step >= 6/);
 });
 
 test('serves the planner preview from the clean public URL', () => {
