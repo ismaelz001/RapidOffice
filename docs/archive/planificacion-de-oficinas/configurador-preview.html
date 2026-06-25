@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planifica tu Oficina — Ofiponiente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap" />
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:         #FFFFFF;
+      --surface:    #F5F5F5;
+      --card:       #FFFFFF;
+      --card-hover: #FDF0F8;
+      --border:     rgba(0,0,0,0.10);
+      --border-lit: rgba(0,0,0,0.20);
+      --pink:       #EA43A5;
+      --pink-dim:   rgba(234,67,165,.08);
+      --pink-glow:  rgba(234,67,165,.20);
+      --white:      #111111;
+      --muted:      rgba(0,0,0,0.45);
+      --text:       rgba(0,0,0,0.75);
+      --green:      #16a34a;
+      --yellow:     #d97706;
+      --radius:     8px;
+      --radius-sm:  5px;
+      --shadow:     0 8px 40px rgba(0,0,0,.7);
+    }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+    input, select, textarea { font-family: inherit; }
+
+    /* ── APP SHELL ──────────────────────────────────────────── */
+    #app {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── SCREEN SYSTEM ──────────────────────────────────────── */
+    .screen {
+      display: none;
+      min-height: 100dvh;
+      flex-direction: column;
+      animation: fadeSlideIn .35s ease forwards;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-18px); }
+    }
+
+    /* ── TOP BAR ────────────────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 24px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex; align-items: center;
+      flex-shrink: 0;
+    }
+    .logo img {
+      height: 32px; width: auto;
+      display: block;
+    }
+    .topbar-right {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .save-btn {
+      font-size: 12px; color: var(--muted); font-family: 'DM Sans', sans-serif;
+      background: none; padding: 6px 12px;
+      border: 1px solid var(--border); border-radius: 4px;
+      transition: all .2s; letter-spacing: .02em;
+    }
+    .save-btn:hover { color: var(--pink); border-color: rgba(234,67,165,.4); }
+
+    /* ── PROGRESS BAR ───────────────────────────────────────── */
+    .progress-wrap {
+      position: fixed; top: 58px; left: 0; right: 0; z-index: 99;
+      padding: 10px 24px 12px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .progress-meta {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--muted); margin-bottom: 7px;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .progress-meta .step-label { font-weight: 600; color: var(--text); font-family: 'DM Sans', sans-serif; letter-spacing: 0; text-transform: none; }
+    .progress-meta .pct { color: var(--pink); font-weight: 700; font-family: 'Clash Display', sans-serif; }
+    .progress-track {
+      height: 2px; background: rgba(0,0,0,0.08); border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--pink);
+      border-radius: 99px;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── PRICE TICKER ───────────────────────────────────────── */
+    .price-ticker {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 98;
+      padding: 10px 24px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ticker-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .ticker-prices {
+      display: flex; gap: 20px; align-items: center;
+    }
+    .ticker-item {
+      text-align: center;
+    }
+    .ticker-item .tier { font-size: 9px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-family: 'Clash Display', sans-serif; }
+    .ticker-item .amount {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      font-family: 'Clash Display', sans-serif;
+      transition: all .3s;
+    }
+    .ticker-item.active .amount { color: var(--pink); }
+    .ticker-item .amount.bump {
+      animation: priceBump .3s ease;
+    }
+    @keyframes priceBump {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); color: var(--pink); }
+      100% { transform: scale(1); }
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .step-content {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 130px 24px 100px;
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .step-q {
+      font-family: 'Clash Display', 'DM Sans', sans-serif;
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 700;
+      color: var(--white);
+      text-align: center;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .step-sub {
+      font-size: 14px; color: var(--muted);
+      text-align: center; margin-bottom: 32px;
+    }
+    .step-sub strong { color: var(--pink); }
+
+    /* ── OPTION CARDS ───────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px; width: 100%;
+    }
+    .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 480px) {
+      .cards-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .opt-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 16px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 8px rgba(0,0,0,.03);
+    }
+    .opt-card:hover {
+      border-color: rgba(234,67,165,.4);
+      background: var(--card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 18px rgba(0,0,0,.09);
+    }
+    .opt-card.selected {
+      border-color: var(--pink);
+      background: var(--pink-dim);
+      box-shadow: 0 0 0 1.5px var(--pink), 0 4px 18px rgba(234,67,165,.12);
+    }
+    .opt-card .icon { display: none; }
+    .opt-card .label {
+      font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.3;
+    }
+    .opt-card .desc {
+      font-size: 12px; color: var(--muted); line-height: 1.4;
+    }
+
+    /* ── COUNTER ────────────────────────────────────────────── */
+    .counter-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+      width: 100%;
+    }
+    .counter-big {
+      display: flex; align-items: center; gap: 24px;
+    }
+    .counter-btn {
+      width: 52px; height: 52px;
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: 50%; font-size: 22px; font-weight: 300;
+      color: var(--text); display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .counter-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .counter-val {
+      font-size: 56px; font-weight: 700; color: var(--white);
+      min-width: 80px; text-align: center;
+      transition: all .2s;
+    }
+    .counter-unit { font-size: 15px; color: var(--muted); }
+    .range-pills {
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    }
+    .range-pill {
+      padding: 7px 16px;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 99px; font-size: 13px; color: var(--muted);
+      cursor: pointer; transition: all .15s;
+    }
+    .range-pill:hover { border-color: var(--pink); color: var(--text); }
+    .range-pill.active { border-color: var(--pink); color: var(--pink); background: var(--pink-dim); }
+    .social-proof {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    .social-proof span { color: var(--pink); font-weight: 600; }
+
+    /* ── ITEM ROWS ──────────────────────────────────────────── */
+    .items-list {
+      width: 100%; display: flex; flex-direction: column; gap: 10px;
+    }
+    .item-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px;
+      transition: border-color .2s;
+    }
+    .item-row.active { border-color: var(--pink); }
+    .item-row-left {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .item-icon { font-size: 22px; width: 36px; text-align: center; }
+    .item-info .item-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .item-info .item-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .item-counter {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .item-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--border);
+      color: var(--text); font-size: 18px; font-weight: 300;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .item-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .item-num {
+      font-size: 18px; font-weight: 700; color: var(--white);
+      min-width: 28px; text-align: center;
+    }
+
+    /* ── YES/NO TOGGLE ──────────────────────────────────────── */
+    .yn-wrap {
+      display: flex; gap: 12px; width: 100%; margin-bottom: 24px;
+    }
+    .yn-btn {
+      flex: 1; padding: 18px;
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: var(--radius); font-size: 16px; font-weight: 600;
+      color: var(--muted); transition: all .2s; cursor: pointer;
+    }
+    .yn-btn.yes.selected { border-color: var(--green); color: var(--green); background: rgba(34,197,94,.1); }
+    .yn-btn.no.selected  { border-color: var(--border-lit); color: var(--text); background: var(--card-hover); }
+    .yn-btn:hover { border-color: var(--border-lit); color: var(--text); }
+
+    .subpanel {
+      width: 100%; display: none;
+      flex-direction: column; gap: 14px;
+      animation: fadeSlideIn .25s ease forwards;
+    }
+    .subpanel.visible { display: flex; }
+    .sub-label {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .7px; margin-bottom: 2px;
+    }
+    .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .radio-pill {
+      padding: 8px 16px; border-radius: 99px;
+      background: var(--card); border: 1.5px solid var(--border);
+      font-size: 13px; color: var(--muted); cursor: pointer;
+      transition: all .15s;
+    }
+    .radio-pill:hover { border-color: var(--border-lit); color: var(--text); }
+    .radio-pill.active { border-color: var(--pink); color: var(--pink); background: var(--pink-dim); }
+
+    /* ── MULTI-SELECT ZONES ─────────────────────────────────── */
+    .zones-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; width: 100%;
+    }
+    @media (max-width: 420px) { .zones-grid { grid-template-columns: repeat(2, 1fr); } }
+    .zone-card {
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: var(--radius); padding: 18px 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; transition: all .2s; text-align: center;
+    }
+    .zone-card:hover { border-color: var(--border-lit); transform: translateY(-2px); }
+    .zone-card.selected {
+      border-color: var(--pink); background: var(--pink-dim);
+    }
+    .zone-icon { font-size: 28px; }
+    .zone-label { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .zone-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 11px; transition: all .15s;
+    }
+    .zone-card.selected .zone-check {
+      background: var(--pink); border-color: var(--pink); color: white;
+    }
+
+    /* ── QUALITY TIERS ──────────────────────────────────────── */
+    .tiers-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; width: 100%;
+    }
+    @media (max-width: 480px) { .tiers-grid { grid-template-columns: 1fr; } }
+    .tier-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 18px 20px;
+      cursor: pointer; transition: all .25s; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .tier-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: transparent; transition: .2s;
+    }
+    .tier-card.basico::before   { background: #60a5fa; }
+    .tier-card.estandar::before { background: var(--pink); }
+    .tier-card.premium::before  { background: linear-gradient(90deg, #f59e0b, #EA43A5); }
+    .tier-card:hover { border-color: var(--border-lit); transform: translateY(-2px); }
+    .tier-card.selected {
+      border-color: var(--pink);
+      background: var(--pink-dim);
+      box-shadow: 0 4px 28px var(--pink-glow);
+      transform: translateY(-3px);
+    }
+    .tier-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      font-family: 'Clash Display', sans-serif;
+      text-transform: uppercase; letter-spacing: .1em;
+      padding: 3px 10px; border-radius: 3px; margin-bottom: 10px;
+    }
+    .basico   .tier-badge { background: rgba(96,165,250,.12); color: #60a5fa; }
+    .estandar .tier-badge { background: var(--pink-dim); color: var(--pink); }
+    .premium  .tier-badge { background: rgba(245,158,11,.12); color: #f59e0b; }
+    .tier-name { font-family: 'Clash Display', sans-serif; font-size: 17px; font-weight: 700; color: var(--white); letter-spacing: -0.02em; margin-bottom: 8px; }
+    .tier-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+    .tier-price {
+      font-size: 22px; font-weight: 800; color: var(--white);
+      transition: all .3s;
+    }
+    .tier-price .currency { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .tier-price .est { font-size: 11px; font-weight: 400; color: var(--muted); display: block; }
+    .popular-badge {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 9px; font-weight: 700;
+      font-family: 'Clash Display', sans-serif;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--pink);
+      background: var(--pink-dim); padding: 3px 8px; border-radius: 3px;
+      border: 1px solid rgba(234,67,165,.25);
+    }
+    .tier-features { text-align: left; margin-top: 14px; }
+    .tier-feat {
+      font-size: 12px; color: var(--muted); padding: 3px 0;
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .tier-feat::before { content: '✓'; color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+    /* ── CONTACT FORM ───────────────────────────────────────── */
+    .form-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; width: 100%;
+    }
+    @media (max-width: 420px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-grid .full { grid-column: 1 / -1; }
+    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
+    .field-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+    .field-input {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 13px 16px;
+      font-size: 15px; color: var(--text); width: 100%;
+      transition: border-color .2s;
+    }
+    .field-input:focus { outline: none; border-color: var(--pink); }
+    .field-input::placeholder { color: var(--muted); }
+    .radio-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .consent-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 12px; background: var(--card); border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+    }
+    .consent-row input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: var(--pink); }
+    .consent-row label { font-size: 13px; color: var(--muted); line-height: 1.4; cursor: pointer; }
+    .consent-row label a { color: var(--pink); text-decoration: none; }
+
+    /* ── NAVIGATION BUTTONS ─────────────────────────────────── */
+    .nav-btns {
+      display: flex; gap: 12px; width: 100%; margin-top: 28px;
+    }
+    .btn-back {
+      padding: 14px 24px;
+      background: none; border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 15px; font-weight: 600; color: var(--muted);
+      transition: all .15s;
+    }
+    .btn-back:hover { border-color: var(--border-lit); color: var(--text); }
+    .btn-next {
+      flex: 1; padding: 15px 24px;
+      background: var(--pink);
+      border-radius: 6px; font-size: 15px; font-weight: 700; color: #0A0A0C;
+      font-family: 'Clash Display', sans-serif; letter-spacing: .02em;
+      box-shadow: 0 4px 20px var(--pink-glow);
+      transition: all .2s;
+    }
+    .btn-next:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .btn-next:active { transform: translateY(0); }
+    .btn-next:disabled {
+      opacity: 1;
+      pointer-events: none;
+      background: rgba(0,0,0,0.04);
+      color: rgba(0,0,0,0.28);
+      box-shadow: none;
+      border: 1.5px solid rgba(0,0,0,0.10);
+    }
+
+    /* ── SCREEN 0 — PORTAL ──────────────────────────────────── */
+    #screen-0 {
+      justify-content: center; align-items: center;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse 70% 50% at 65% 15%, rgba(234,67,165,.09) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(234,67,165,.05) 0%, transparent 50%),
+        var(--bg);
+      padding: 40px 24px;
+    }
+    .portal-inner {
+      max-width: 540px; width: 100%;
+      text-align: center; display: flex; flex-direction: column; gap: 24px;
+    }
+    .portal-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid rgba(234,67,165,.3);
+      border-radius: 4px; padding: 6px 14px;
+      font-size: 11px; color: var(--pink); font-weight: 600;
+      font-family: 'Clash Display', sans-serif;
+      text-transform: uppercase; letter-spacing: .12em;
+      margin: 0 auto;
+    }
+    .portal-badge::before { content: '✦'; font-size: 9px; }
+    .portal-h1 {
+      font-family: 'Clash Display', 'DM Sans', sans-serif;
+      font-size: clamp(38px, 8vw, 64px);
+      font-weight: 700; color: var(--white); line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+    .portal-h1 .accent { color: var(--pink); }
+    .portal-sub {
+      font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 420px; margin: 0 auto;
+      font-weight: 400;
+    }
+    .portal-pills {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .portal-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 7px 14px;
+      font-size: 13px; color: var(--muted);
+    }
+    .portal-pill .dot { color: var(--green); font-size: 8px; }
+    .btn-start {
+      padding: 16px 36px;
+      background: var(--pink);
+      border-radius: 6px; font-size: 16px; font-weight: 700; color: #0A0A0C;
+      font-family: 'Clash Display', sans-serif; letter-spacing: .02em;
+      box-shadow: 0 8px 40px var(--pink-glow);
+      transition: all .25s;
+      display: flex; align-items: center; gap: 10px; margin: 0 auto;
+    }
+    .btn-start:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 12px 50px var(--pink-glow); filter: brightness(1.08); }
+    .btn-start .arrow { font-size: 18px; transition: transform .2s; }
+    .btn-start:hover .arrow { transform: translateX(4px); }
+    .portal-proof {
+      font-size: 12px; color: var(--muted); display: flex;
+      align-items: center; gap: 10px; justify-content: center;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .portal-proof::before, .portal-proof::after {
+      content: ''; flex: 1; max-width: 48px; height: 1px; background: var(--border);
+    }
+
+    /* ── RESULT SCREEN ──────────────────────────────────────── */
+    #screen-result {
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(234,67,165,.08) 0%, transparent 50%),
+        var(--bg);
+      padding: 80px 24px 60px;
+      align-items: center; flex-direction: column;
+    }
+    .result-inner { max-width: 680px; width: 100%; }
+    .result-header {
+      text-align: center; margin-bottom: 40px;
+    }
+    .result-check {
+      width: 64px; height: 64px; background: rgba(34,197,94,.15);
+      border: 2px solid var(--green); border-radius: 50%;
+      font-size: 28px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      animation: popIn .4s cubic-bezier(.175,.885,.32,1.275) forwards;
+    }
+    @keyframes popIn {
+      from { transform: scale(0) rotate(-45deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+    }
+    .result-title {
+      font-family: 'Clash Display', 'DM Sans', sans-serif;
+      font-size: clamp(26px, 5vw, 40px); font-weight: 700;
+      color: var(--white); letter-spacing: -0.04em; margin-bottom: 6px;
+    }
+    .result-sub { font-size: 15px; color: var(--muted); }
+    .result-summary {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      margin-bottom: 32px; display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .summary-tag {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 6px 12px;
+      font-size: 13px; color: var(--muted);
+    }
+    .summary-tag strong { color: var(--text); }
+    .result-tiers {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin-bottom: 32px;
+    }
+    @media (max-width: 520px) { .result-tiers { grid-template-columns: 1fr; } }
+    .result-tier {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 18px;
+      text-align: center; position: relative;
+      animation: tierReveal .5s ease both;
+      overflow: hidden;
+    }
+    .result-tier:nth-child(1) { animation-delay: .1s; }
+    .result-tier:nth-child(2) { animation-delay: .25s; border-color: var(--pink); box-shadow: 0 4px 28px var(--pink-glow); }
+    .result-tier:nth-child(3) { animation-delay: .4s; }
+    @keyframes tierReveal {
+      from { opacity: 0; transform: translateY(20px) scale(.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .result-tier-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--muted); margin-bottom: 10px;
+    }
+    .result-tier:nth-child(2) .result-tier-name { color: var(--pink); }
+    .result-price { font-size: 28px; font-weight: 800; color: var(--white); }
+    .result-price small { font-size: 14px; font-weight: 400; color: var(--muted); }
+    .result-iva { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .result-cta-row {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px;
+    }
+    .cta-primary {
+      padding: 14px 26px;
+      background: var(--pink);
+      border-radius: 6px; font-size: 14px; font-weight: 700; color: #0A0A0C;
+      font-family: 'Clash Display', sans-serif; letter-spacing: .02em;
+      box-shadow: 0 4px 20px var(--pink-glow); transition: all .2s;
+    }
+    .cta-primary:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .cta-secondary {
+      padding: 16px 24px;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 15px; font-weight: 600; color: var(--text);
+      transition: all .2s;
+    }
+    .cta-secondary:hover { border-color: var(--border-lit); }
+    .result-disclaimer {
+      text-align: center; font-size: 13px; color: var(--muted); line-height: 1.6;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 28px;
+    }
+    .result-disclaimer strong { color: var(--text); }
+    .result-next-section h3 {
+      font-size: 15px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .8px;
+      text-align: center; margin-bottom: 12px;
+    }
+    .next-links {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    }
+    .next-link {
+      padding: 12px 20px;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 14px; color: var(--muted);
+      transition: all .2s; text-decoration: none; display: flex; align-items: center; gap: 8px;
+    }
+    .next-link:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── ALMOST BADGE ───────────────────────────────────────── */
+    .almost-badge {
+      display: inline-block; background: var(--pink-dim); color: var(--pink);
+      border: 1px solid rgba(234,67,165,.25); border-radius: 4px;
+      padding: 4px 12px; font-size: 11px; font-weight: 600;
+      font-family: 'Clash Display', sans-serif;
+      text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px;
+    }
+
+    /* ── DIVIDER ────────────────────────────────────────────── */
+    .divider {
+      width: 100%; height: 1px; background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── SCROLLBAR ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCREEN 0 — PORTAL
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-0" class="screen active">
+    <div class="portal-inner">
+      <div class="logo" style="margin: 0 auto 24px; justify-content: center;">
+        <img src="../frontend/public/logo.png" alt="Ofiponiente" style="height: 44px; width: auto;" />
+      </div>
+      <div class="portal-badge">Planificador de Oficinas</div>
+      <h1 class="portal-h1">
+        Tu oficina ideal,<br />
+        <span class="accent">presupuestada</span><br />
+        en 4 minutos.
+      </h1>
+      <p class="portal-sub">
+        Configura tu espacio de trabajo paso a paso y recibe
+        3 opciones de presupuesto adaptadas a tu proyecto.
+        <strong style="color:var(--text)">Sin llamadas. Sin esperas.</strong>
+      </p>
+      <div class="portal-pills">
+        <div class="portal-pill"><span class="dot">●</span> Solo 4 minutos</div>
+        <div class="portal-pill"><span class="dot">●</span> Sin registro obligatorio</div>
+        <div class="portal-pill"><span class="dot">●</span> Guardamos tu progreso</div>
+        <div class="portal-pill"><span class="dot">●</span> Sin compromiso</div>
+      </div>
+      <button class="btn-start" onclick="startConfigurator()">
+        Configura tu oficina
+        <span class="arrow">→</span>
+      </button>
+      <div class="portal-proof">Más de 200 oficinas equipadas en Galicia</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOPBAR + PROGRESS (solo en steps 1-7)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="topbar" id="topbar" style="display:none;">
+    <div class="logo">
+      <img src="../frontend/public/logo.png" alt="Ofiponiente" />
+    </div>
+    <div class="topbar-right">
+      <button class="save-btn" onclick="saveProgress()">Guardar y continuar después</button>
+    </div>
+  </div>
+  <div class="progress-wrap" id="progress-wrap" style="display:none;">
+    <div class="progress-meta">
+      <span class="step-label" id="step-label">Paso 1 de 7</span>
+      <span class="pct" id="step-pct">14%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:14%"></div>
+    </div>
+  </div>
+
+  <!-- PRICE TICKER -->
+  <div class="price-ticker" id="price-ticker" style="display:none;">
+    <div class="ticker-label">Estimación actual</div>
+    <div class="ticker-prices">
+      <div class="ticker-item" id="tick-basico">
+        <div class="tier">Básico</div>
+        <div class="amount" id="tick-val-basico">—</div>
+      </div>
+      <div class="ticker-item active" id="tick-estandar">
+        <div class="tier">Estándar</div>
+        <div class="amount" id="tick-val-estandar">—</div>
+      </div>
+      <div class="ticker-item" id="tick-premium">
+        <div class="tier">Premium</div>
+        <div class="amount" id="tick-val-premium">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 1 — TIPO DE PROYECTO
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-1" class="screen">
+    <div class="step-content">
+      <h2 class="step-q">¿Qué tipo de proyecto tienes?</h2>
+      <p class="step-sub">Esto nos ayuda a entender tu punto de partida</p>
+      <div class="cards-grid">
+        <div class="opt-card" onclick="selectOption(this,'tipo','nueva')">
+          <div class="icon">🏢</div>
+          <div class="label">Oficina nueva</div>
+          <div class="desc">Espacio sin amueblar</div>
+        </div>
+        <div class="opt-card" onclick="selectOption(this,'tipo','reforma')">
+          <div class="icon">🔨</div>
+          <div class="label">Reforma interior</div>
+          <div class="desc">Renovar lo existente</div>
+        </div>
+        <div class="opt-card" onclick="selectOption(this,'tipo','ampliar')">
+          <div class="icon">📐</div>
+          <div class="label">Ampliar espacio</div>
+          <div class="desc">Añadir más puestos</div>
+        </div>
+        <div class="opt-card" onclick="selectOption(this,'tipo','despacho')">
+          <div class="icon">👤</div>
+          <div class="label">Despacho individual</div>
+          <div class="desc">Autónomo o directivo</div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" id="btn-next-1" onclick="goNext(2)" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 2 — PERSONAS
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-2" class="screen">
+    <div class="step-content">
+      <h2 class="step-q">¿Cuántas personas trabajarán en la oficina?</h2>
+      <p class="step-sub">Puestos de trabajo simultáneos</p>
+      <div class="counter-wrap">
+        <div class="counter-big">
+          <button class="counter-btn" onclick="adjustPersonas(-1)">−</button>
+          <div>
+            <div class="counter-val" id="personas-val">12</div>
+            <div class="counter-unit" style="text-align:center">personas</div>
+          </div>
+          <button class="counter-btn" onclick="adjustPersonas(1)">+</button>
+        </div>
+        <div class="range-pills">
+          <div class="range-pill" onclick="setPersonas(3,this)">1–5</div>
+          <div class="range-pill active" onclick="setPersonas(12,this)">6–20</div>
+          <div class="range-pill" onclick="setPersonas(30,this)">21–50</div>
+          <div class="range-pill" onclick="setPersonas(60,this)">+50</div>
+        </div>
+        <div class="social-proof">
+          💡 El proyecto medio en Ofiponiente es de <span>12 puestos</span> de trabajo
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" onclick="goNext(3)">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 3 — MOBILIARIO POR PUESTO
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-3" class="screen">
+    <div class="step-content">
+      <h2 class="step-q">¿Qué mobiliario necesitas?</h2>
+      <p class="step-sub">Ajusta las cantidades para cada elemento</p>
+      <div class="items-list" id="items-list">
+        <div class="item-row active">
+          <div class="item-row-left">
+            <div class="item-icon">🖥️</div>
+            <div class="item-info">
+              <div class="item-name">Mesas de trabajo</div>
+              <div class="item-sub">Escritorios estándar</div>
+            </div>
+          </div>
+          <div class="item-counter">
+            <button class="item-btn" onclick="adjustItem('mesas',-1)">−</button>
+            <div class="item-num" id="cnt-mesas">12</div>
+            <button class="item-btn" onclick="adjustItem('mesas',1)">+</button>
+          </div>
+        </div>
+        <div class="item-row active">
+          <div class="item-row-left">
+            <div class="item-icon">🪑</div>
+            <div class="item-info">
+              <div class="item-name">Sillas de oficina</div>
+              <div class="item-sub">Ergonómicas regulables</div>
+            </div>
+          </div>
+          <div class="item-counter">
+            <button class="item-btn" onclick="adjustItem('sillas',-1)">−</button>
+            <div class="item-num" id="cnt-sillas">12</div>
+            <button class="item-btn" onclick="adjustItem('sillas',1)">+</button>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-row-left">
+            <div class="item-icon">🧲</div>
+            <div class="item-info">
+              <div class="item-name">Mesas elevables</div>
+              <div class="item-sub">Standing desk eléctrico</div>
+            </div>
+          </div>
+          <div class="item-counter">
+            <button class="item-btn" onclick="adjustItem('elevables',-1)">−</button>
+            <div class="item-num" id="cnt-elevables">0</div>
+            <button class="item-btn" onclick="adjustItem('elevables',1)">+</button>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-row-left">
+            <div class="item-icon">📁</div>
+            <div class="item-info">
+              <div class="item-name">Cajoneras personales</div>
+              <div class="item-sub">Bajo mesa con llave</div>
+            </div>
+          </div>
+          <div class="item-counter">
+            <button class="item-btn" onclick="adjustItem('cajoneras',-1)">−</button>
+            <div class="item-num" id="cnt-cajoneras">0</div>
+            <button class="item-btn" onclick="adjustItem('cajoneras',1)">+</button>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-row-left">
+            <div class="item-icon">🖥️</div>
+            <div class="item-info">
+              <div class="item-name">Pedestales / armarios</div>
+              <div class="item-sub">Almacenaje individual</div>
+            </div>
+          </div>
+          <div class="item-counter">
+            <button class="item-btn" onclick="adjustItem('armarios',-1)">−</button>
+            <div class="item-num" id="cnt-armarios">0</div>
+            <button class="item-btn" onclick="adjustItem('armarios',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" onclick="goNext(4)">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 4 — SALA DE REUNIONES
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-4" class="screen">
+    <div class="step-content">
+      <h2 class="step-q">¿Tienes sala(s) de reunión?</h2>
+      <div class="yn-wrap">
+        <button class="yn-btn yes" onclick="toggleYN('reunion','si',this)">✓ Sí, las necesito</button>
+        <button class="yn-btn no"  onclick="toggleYN('reunion','no',this)">✕ No por ahora</button>
+      </div>
+      <div class="subpanel" id="subpanel-reunion">
+        <div>
+          <div class="sub-label">Número de salas</div>
+          <div class="range-pills" style="margin-top:8px">
+            <div class="range-pill active" onclick="selectPill(this,'rsalas','1')">1 sala</div>
+            <div class="range-pill" onclick="selectPill(this,'rsalas','2')">2 salas</div>
+            <div class="range-pill" onclick="selectPill(this,'rsalas','3')">3 salas</div>
+            <div class="range-pill" onclick="selectPill(this,'rsalas','4+')">4 o más</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">Capacidad por sala</div>
+          <div class="radio-group" style="margin-top:8px">
+            <div class="radio-pill" onclick="selectPill(this,'rcap','4')">4 personas</div>
+            <div class="radio-pill active" onclick="selectPill(this,'rcap','6')">6 personas</div>
+            <div class="radio-pill" onclick="selectPill(this,'rcap','8')">8 personas</div>
+            <div class="radio-pill" onclick="selectPill(this,'rcap','10')">10+ personas</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">Tipo de sillas de reunión</div>
+          <div class="radio-group" style="margin-top:8px">
+            <div class="radio-pill" onclick="selectPill(this,'rtipo','apilables')">Apilables</div>
+            <div class="radio-pill active" onclick="selectPill(this,'rtipo','ruedas')">Con ruedas</div>
+            <div class="radio-pill" onclick="selectPill(this,'rtipo','fijas')">Fijas premium</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">Mesa de reunión</div>
+          <div class="radio-group" style="margin-top:8px">
+            <div class="radio-pill active" onclick="selectPill(this,'rmesa','rect')">Rectangular</div>
+            <div class="radio-pill" onclick="selectPill(this,'rmesa','oval')">Ovalada</div>
+            <div class="radio-pill" onclick="selectPill(this,'rmesa','redonda')">Redonda</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" onclick="goNext(5)">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 5 — ZONAS ADICIONALES
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-5" class="screen">
+    <div class="step-content">
+      <h2 class="step-q">¿Qué zonas adicionales necesitas?</h2>
+      <p class="step-sub">Selecciona todas las que apliquen <strong>(opcional)</strong></p>
+      <div class="zones-grid">
+        <div class="zone-card" onclick="toggleZone(this,'recepcion')">
+          <div class="zone-icon">🚪</div>
+          <div class="zone-label">Recepción y espera</div>
+          <div class="zone-check">✓</div>
+        </div>
+        <div class="zone-card" onclick="toggleZone(this,'cafeteria')">
+          <div class="zone-icon">☕</div>
+          <div class="zone-label">Zona de descanso / café</div>
+          <div class="zone-check">✓</div>
+        </div>
+        <div class="zone-card" onclick="toggleZone(this,'almacenaje')">
+          <div class="zone-icon">📦</div>
+          <div class="zone-label">Almacenaje general</div>
+          <div class="zone-check">✓</div>
+        </div>
+        <div class="zone-card" onclick="toggleZone(this,'mamparas')">
+          <div class="zone-icon">🧱</div>
+          <div class="zone-label">Mamparas y divisiones</div>
+          <div class="zone-check">✓</div>
+        </div>
+        <div class="zone-card" onclick="toggleZone(this,'decoracion')">
+          <div class="zone-icon">🌿</div>
+          <div class="zone-label">Decoración y plantas</div>
+          <div class="zone-check">✓</div>
+        </div>
+        <div class="zone-card" onclick="toggleZone(this,'iluminacion')">
+          <div class="zone-icon">💡</div>
+          <div class="zone-label">Iluminación especial</div>
+          <div class="zone-check">✓</div>
+        </div>
+      </div>
+
+      <!-- Subpanel Recepción -->
+      <div class="subpanel" id="subpanel-recepcion" style="margin-top:16px">
+        <div class="divider"></div>
+        <div class="sub-label">Recepción — detalle</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Mostrador</div>
+            <div class="radio-group">
+              <div class="radio-pill active" onclick="selectPill(this,'mostrador','si')">Sí</div>
+              <div class="radio-pill" onclick="selectPill(this,'mostrador','no')">No</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Sillas de espera</div>
+            <div class="radio-group">
+              <div class="radio-pill" onclick="selectPill(this,'espera','2')">2</div>
+              <div class="radio-pill active" onclick="selectPill(this,'espera','4')">4</div>
+              <div class="radio-pill" onclick="selectPill(this,'espera','6')">6</div>
+              <div class="radio-pill" onclick="selectPill(this,'espera','8+')">8+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" onclick="goNext(6)">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 6 — NIVEL DE CALIDAD
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-6" class="screen">
+    <div class="step-content">
+      <div class="almost-badge">¡Casi listo! Solo 2 pasos más</div>
+      <h2 class="step-q">Elige el nivel de acabado</h2>
+      <p class="step-sub">Define la calidad y el presupuesto orientativo de tu proyecto</p>
+      <div class="tiers-grid">
+        <div class="tier-card basico" onclick="selectTier('basico',this)">
+          <div class="tier-badge">Básico</div>
+          <div class="tier-name">Funcional</div>
+          <div class="tier-desc">Mobiliario práctico y duradero. Precio ajustado sin renunciar a calidad.</div>
+          <div class="tier-price">
+            <span id="tier-price-basico">—</span> <span class="currency">€</span>
+            <span class="est">estimación orientativa</span>
+          </div>
+          <div class="tier-features">
+            <div class="tier-feat">Garantía 2 años</div>
+            <div class="tier-feat">Marcas nacionales</div>
+            <div class="tier-feat">Entrega estándar</div>
+          </div>
+        </div>
+        <div class="tier-card estandar" onclick="selectTier('estandar',this)">
+          <div class="popular-badge">Popular</div>
+          <div class="tier-badge">Estándar</div>
+          <div class="tier-name">Equilibrado</div>
+          <div class="tier-desc">Calidad-precio óptimo. Diseño cuidado y mayor ergonomía.</div>
+          <div class="tier-price">
+            <span id="tier-price-estandar">—</span> <span class="currency">€</span>
+            <span class="est">estimación orientativa</span>
+          </div>
+          <div class="tier-features">
+            <div class="tier-feat">Garantía 5 años</div>
+            <div class="tier-feat">Marcas reconocidas</div>
+            <div class="tier-feat">Montaje incluido</div>
+          </div>
+        </div>
+        <div class="tier-card premium" onclick="selectTier('premium',this)">
+          <div class="tier-badge">Premium</div>
+          <div class="tier-name">Exclusivo</div>
+          <div class="tier-desc">Marcas top. Diseño de autor, máxima ergonomía y durabilidad.</div>
+          <div class="tier-price">
+            <span id="tier-price-premium">—</span> <span class="currency">€</span>
+            <span class="est">estimación orientativa</span>
+          </div>
+          <div class="tier-features">
+            <div class="tier-feat">Garantía 10 años</div>
+            <div class="tier-feat">Actiu · Steelcase · Nowy Styl</div>
+            <div class="tier-feat">Gestión de proyecto completa</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px">
+        * Precios orientativos IVA no incluido. Tu presupuesto final revisado llegará en menos de 24h.
+      </p>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" id="btn-next-6" onclick="goNext(7)" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STEP 7 — DATOS DE CONTACTO
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-7" class="screen">
+    <div class="step-content">
+      <div class="almost-badge">¡Último paso!</div>
+      <h2 class="step-q">¿A dónde enviamos tu presupuesto?</h2>
+      <p class="step-sub">Recibirás tu presupuesto revisado en <strong>menos de 24 horas</strong></p>
+      <div class="form-grid">
+        <div class="field-wrap">
+          <label class="field-label">Nombre *</label>
+          <input class="field-input" type="text" id="f-nombre" placeholder="Tu nombre" oninput="checkForm()" />
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Empresa (opcional)</label>
+          <input class="field-input" type="text" id="f-empresa" placeholder="Nombre de empresa" />
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Email *</label>
+          <input class="field-input" type="email" id="f-email" placeholder="tu@email.com" oninput="checkForm()" />
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Teléfono *</label>
+          <input class="field-input" type="tel" id="f-telefono" placeholder="612 345 678" oninput="checkForm()" />
+        </div>
+        <div class="field-wrap full">
+          <label class="field-label">¿Cuándo necesitas el mobiliario?</label>
+          <div class="radio-row" style="margin-top:8px">
+            <div class="radio-pill" onclick="selectPill(this,'plazo','urgente')">Lo antes posible</div>
+            <div class="radio-pill active" onclick="selectPill(this,'plazo','3meses')">En 1–3 meses</div>
+            <div class="radio-pill" onclick="selectPill(this,'plazo','explorando')">Explorando opciones</div>
+          </div>
+        </div>
+        <div class="field-wrap full">
+          <label class="field-label">¿Tienes plano de la oficina? (opcional)</label>
+          <input class="field-input" type="file" id="f-plano" accept=".pdf,.png,.jpg,.dwg"
+            style="padding:10px 16px;cursor:pointer" />
+        </div>
+        <div class="field-wrap full">
+          <div class="consent-row">
+            <input type="checkbox" id="consent-1" onchange="checkForm()" />
+            <label for="consent-1">Acepto recibir mi estimación y presupuesto por email. Ver <a href="#">política de privacidad</a>.</label>
+          </div>
+        </div>
+        <div class="field-wrap full">
+          <div class="consent-row">
+            <input type="checkbox" id="consent-2" />
+            <label for="consent-2">Acepto recibir comunicaciones comerciales de Ofiponiente (opcional).</label>
+          </div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" id="btn-submit" onclick="submitForm()" disabled>
+          🚀 Ver mi estimación y enviar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       RESULT SCREEN
+  ══════════════════════════════════════════════════════════ -->
+  <div id="screen-result" class="screen">
+    <div class="result-inner">
+      <div class="result-header">
+        <div class="result-check">✓</div>
+        <h2 class="result-title">¡Tu configuración está lista!</h2>
+        <p class="result-sub" id="result-sub">Oficina para 12 personas · Nivel Estándar</p>
+      </div>
+
+      <div class="result-summary" id="result-summary">
+        <div class="summary-tag"><strong>12</strong> personas</div>
+        <div class="summary-tag"><strong>12</strong> mesas</div>
+        <div class="summary-tag"><strong>12</strong> sillas</div>
+        <div class="summary-tag">Sala de reuniones</div>
+        <div class="summary-tag">Nivel Estándar</div>
+      </div>
+
+      <div class="result-tiers">
+        <div class="result-tier">
+          <div class="result-tier-name">Opción Básica</div>
+          <div class="result-price"><span id="res-basico">—</span> <small>€</small></div>
+          <div class="result-iva">IVA no incluido</div>
+        </div>
+        <div class="result-tier">
+          <div class="result-tier-name">Tu elección ✓</div>
+          <div class="result-price"><span id="res-estandar">—</span> <small>€</small></div>
+          <div class="result-iva">IVA no incluido</div>
+        </div>
+        <div class="result-tier">
+          <div class="result-tier-name">Opción Premium</div>
+          <div class="result-price"><span id="res-premium">—</span> <small>€</small></div>
+          <div class="result-iva">IVA no incluido</div>
+        </div>
+      </div>
+
+      <div class="result-disclaimer">
+        Enviamos confirmación a <strong id="result-email">tu email</strong>.<br />
+        Tu presupuesto final revisado llegará en <strong>menos de 24 horas laborables</strong>.
+        Un asesor de Ofiponiente revisará tu configuración y podrá sugerir ajustes.
+      </div>
+
+      <div class="result-cta-row">
+        <button class="cta-primary">📄 Descargar resumen PDF</button>
+        <button class="cta-secondary">💬 Hablar con un asesor ahora</button>
+      </div>
+
+      <div class="result-next-section">
+        <h3>Mientras esperas</h3>
+        <div class="next-links">
+          <a class="next-link" href="#">🏢 Ver proyectos realizados →</a>
+          <a class="next-link" href="#">🛋️ Explorar catálogo →</a>
+          <a class="next-link" href="#">⭐ Marcas que trabajamos →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+const state = {
+  currentStep: 0,
+  tipo: null,
+  personas: 12,
+  mobiliario: { mesas:12, sillas:12, elevables:0, cajoneras:0, armarios:0 },
+  reunion: { tiene: null, salas:'1', capacidad:'6', tipoSillas:'ruedas', mesa:'rect' },
+  zonas: new Set(),
+  recepcion: { mostrador:'si', espera:'4' },
+  nivel: null,
+  contacto: { nombre:'', empresa:'', email:'', telefono:'', plazo:'3meses', plano:null },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   PRICE CALCULATION
+══════════════════════════════════════════════════════════════ */
+const UNIT = {
+  basico:   { mesa:280,  silla:160,  elevable:450, cajonera:90, armario:110, sReunion:85,  mReunion:450, sEspera:90,  mostrador:650, cafeteria:900, almacenaje:700, mamparas:1400, decoracion:500, iluminacion:600 },
+  estandar: { mesa:480,  silla:340,  elevable:850, cajonera:160, armario:200, sReunion:200, mReunion:950, sEspera:190, mostrador:1300, cafeteria:1700, almacenaje:1300, mamparas:2600, decoracion:1000, iluminacion:1200 },
+  premium:  { mesa:950,  silla:750,  elevable:1800, cajonera:320, armario:400, sReunion:480, mReunion:2200, sEspera:420, mostrador:2800, cafeteria:3200, almacenaje:2400, mamparas:5000, decoracion:2000, iluminacion:2500 },
+};
+
+function calcPrice(nivel) {
+  const u = UNIT[nivel];
+  const m = state.mobiliario;
+  let total = 0;
+  total += m.mesas * u.mesa;
+  total += m.sillas * u.silla;
+  total += m.elevables * u.elevable;
+  total += m.cajoneras * u.cajonera;
+  total += m.armarios * u.armario;
+  if (state.reunion.tiene === 'si') {
+    const salas = state.reunion.salas === '4+' ? 4 : parseInt(state.reunion.salas);
+    const cap   = parseInt(state.reunion.capacidad);
+    total += salas * cap * u.sReunion;
+    total += salas * u.mReunion;
+  }
+  if (state.zonas.has('recepcion')) {
+    total += u.mostrador;
+    const espera = state.recepcion.espera === '8+' ? 8 : parseInt(state.recepcion.espera);
+    total += espera * u.sEspera;
+  }
+  if (state.zonas.has('cafeteria'))   total += u.cafeteria;
+  if (state.zonas.has('almacenaje'))  total += u.almacenaje;
+  if (state.zonas.has('mamparas'))    total += u.mamparas;
+  if (state.zonas.has('decoracion'))  total += u.decoracion;
+  if (state.zonas.has('iluminacion')) total += u.iluminacion;
+  return Math.round(total / 100) * 100;
+}
+
+function fmt(n) {
+  return n.toLocaleString('es-ES');
+}
+
+function updatePrices() {
+  const b = calcPrice('basico');
+  const e = calcPrice('estandar');
+  const p = calcPrice('premium');
+
+  // Ticker
+  ['basico','estandar','premium'].forEach(t => {
+    const el = document.getElementById(`tick-val-${t}`);
+    const val = t === 'basico' ? b : t === 'estandar' ? e : p;
+    if (el && el.textContent !== '—') {
+      el.classList.remove('bump');
+      void el.offsetWidth;
+      el.classList.add('bump');
+    }
+    if (el) el.textContent = val > 0 ? fmt(val) + ' €' : '—';
+  });
+
+  // Tier cards step 6
+  const tp = { basico: b, estandar: e, premium: p };
+  ['basico','estandar','premium'].forEach(t => {
+    const el = document.getElementById(`tier-price-${t}`);
+    if (el) el.textContent = tp[t] > 0 ? fmt(tp[t]) : '—';
+  });
+
+  // Result
+  document.getElementById('res-basico').textContent   = fmt(b);
+  document.getElementById('res-estandar').textContent = fmt(e);
+  document.getElementById('res-premium').textContent  = fmt(p);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════════ */
+const STEP_LABELS = ['','Tipo de proyecto','Número de personas','Mobiliario','Sala de reuniones','Zonas adicionales','Nivel de calidad','Tus datos'];
+const TOTAL_STEPS = 7;
+
+function startConfigurator() {
+  document.getElementById('screen-0').classList.remove('active');
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('price-ticker').style.display = 'flex';
+  goNext(1);
+}
+
+function goNext(step) {
+  const prev = state.currentStep;
+  const prevScreen = document.getElementById(`screen-${prev === 0 ? 0 : prev}`);
+  if (prevScreen) prevScreen.classList.remove('active');
+
+  state.currentStep = step;
+  const next = document.getElementById(`screen-${step}`);
+  if (next) next.classList.add('active');
+
+  updateProgress(step);
+  updatePrices();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Save to localStorage
+  saveToLocal();
+}
+
+function goBack() {
+  if (state.currentStep <= 1) {
+    goToPortal();
+    return;
+  }
+  goNext(state.currentStep - 1);
+}
+
+function goToPortal() {
+  document.getElementById(`screen-${state.currentStep}`).classList.remove('active');
+  document.getElementById('topbar').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('price-ticker').style.display = 'none';
+  document.getElementById('screen-0').classList.add('active');
+  state.currentStep = 0;
+}
+
+function updateProgress(step) {
+  const pct = Math.round((step / TOTAL_STEPS) * 100);
+  document.getElementById('step-label').textContent = `Paso ${step} de ${TOTAL_STEPS} — ${STEP_LABELS[step]}`;
+  document.getElementById('step-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STEP INTERACTIONS
+══════════════════════════════════════════════════════════════ */
+function selectOption(el, field, value) {
+  el.closest('.cards-grid').querySelectorAll('.opt-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[field] = value;
+  // Enable next button
+  const nextBtn = document.getElementById(`btn-next-1`);
+  if (nextBtn) nextBtn.disabled = false;
+  // Auto-advance after short delay
+  setTimeout(() => goNext(2), 300);
+}
+
+function adjustPersonas(delta) {
+  state.personas = Math.max(1, Math.min(200, state.personas + delta));
+  document.getElementById('personas-val').textContent = state.personas;
+  // Sync items
+  state.mobiliario.mesas  = state.personas;
+  state.mobiliario.sillas = state.personas;
+  document.getElementById('cnt-mesas').textContent  = state.mobiliario.mesas;
+  document.getElementById('cnt-sillas').textContent = state.mobiliario.sillas;
+  document.querySelectorAll('.range-pill').forEach(p => p.classList.remove('active'));
+  updatePrices();
+}
+
+function setPersonas(n, el) {
+  state.personas = n;
+  document.getElementById('personas-val').textContent = n;
+  state.mobiliario.mesas  = n;
+  state.mobiliario.sillas = n;
+  document.getElementById('cnt-mesas').textContent  = n;
+  document.getElementById('cnt-sillas').textContent = n;
+  // Pills
+  el.closest('.range-pills').querySelectorAll('.range-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  updatePrices();
+}
+
+function adjustItem(field, delta) {
+  state.mobiliario[field] = Math.max(0, (state.mobiliario[field] || 0) + delta);
+  const el = document.getElementById(`cnt-${field}`);
+  if (el) el.textContent = state.mobiliario[field];
+  const row = el?.closest('.item-row');
+  if (row) row.classList.toggle('active', state.mobiliario[field] > 0);
+  updatePrices();
+}
+
+function toggleYN(type, val, btn) {
+  btn.closest('.yn-wrap').querySelectorAll('.yn-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state[type === 'reunion' ? 'reunion' : type].tiene = val;
+  const sp = document.getElementById(`subpanel-${type}`);
+  if (sp) {
+    if (val === 'si') sp.classList.add('visible');
+    else              sp.classList.remove('visible');
+  }
+  if (type === 'reunion') state.reunion.tiene = val;
+  updatePrices();
+}
+
+function selectPill(el, field, value) {
+  el.closest('.radio-group, .range-pills, .radio-row')
+    .querySelectorAll('.radio-pill, .range-pill')
+    .forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  // Map to state
+  const map = {
+    rsalas: () => state.reunion.salas = value,
+    rcap:   () => state.reunion.capacidad = value,
+    rtipo:  () => state.reunion.tipoSillas = value,
+    rmesa:  () => state.reunion.mesa = value,
+    mostrador: () => state.recepcion.mostrador = value,
+    espera:    () => state.recepcion.espera = value,
+    plazo:     () => state.contacto.plazo = value,
+  };
+  if (map[field]) map[field]();
+  updatePrices();
+}
+
+function toggleZone(card, zone) {
+  card.classList.toggle('selected');
+  if (state.zonas.has(zone)) state.zonas.delete(zone);
+  else state.zonas.add(zone);
+  // Show recepcion subpanel
+  const sp = document.getElementById('subpanel-recepcion');
+  if (sp) sp.classList.toggle('visible', state.zonas.has('recepcion'));
+  updatePrices();
+}
+
+function selectTier(tier, card) {
+  document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  state.nivel = tier;
+  document.getElementById('btn-next-6').disabled = false;
+  updatePrices();
+}
+
+function checkForm() {
+  const nombre   = document.getElementById('f-nombre').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const consent  = document.getElementById('consent-1').checked;
+  document.getElementById('btn-submit').disabled = !(nombre && email && telefono && consent);
+}
+
+function submitForm() {
+  state.contacto.nombre   = document.getElementById('f-nombre').value.trim();
+  state.contacto.email    = document.getElementById('f-email').value.trim();
+  state.contacto.empresa  = document.getElementById('f-empresa').value.trim();
+  state.contacto.telefono = document.getElementById('f-telefono').value.trim();
+
+  // Build result
+  const nivelLabel = { basico:'Básico', estandar:'Estándar', premium:'Premium' }[state.nivel] || 'Estándar';
+  document.getElementById('result-sub').textContent =
+    `Oficina para ${state.personas} persona${state.personas !== 1 ? 's' : ''} · Nivel ${nivelLabel}`;
+  document.getElementById('result-email').textContent = state.contacto.email;
+
+  // Summary tags
+  const tags = [
+    `<div class="summary-tag"><strong>${state.personas}</strong> persona${state.personas !== 1 ? 's' : ''}</div>`,
+    `<div class="summary-tag"><strong>${state.mobiliario.mesas}</strong> mesa${state.mobiliario.mesas !== 1 ? 's' : ''}</div>`,
+    `<div class="summary-tag"><strong>${state.mobiliario.sillas}</strong> silla${state.mobiliario.sillas !== 1 ? 's' : ''}</div>`,
+    state.mobiliario.elevables > 0 ? `<div class="summary-tag"><strong>${state.mobiliario.elevables}</strong> mesa${state.mobiliario.elevables !== 1 ? 's' : ''} elevable${state.mobiliario.elevables !== 1 ? 's' : ''}</div>` : '',
+    state.reunion.tiene === 'si' ? `<div class="summary-tag">Sala de reuniones · ${state.reunion.salas}</div>` : '',
+    state.zonas.has('recepcion') ? `<div class="summary-tag">Recepción</div>` : '',
+    `<div class="summary-tag">Nivel <strong>${nivelLabel}</strong></div>`,
+  ];
+  document.getElementById('result-summary').innerHTML = tags.filter(Boolean).join('');
+
+  // Update result tier label
+  document.querySelector('.result-tiers .result-tier:nth-child(2) .result-tier-name').textContent =
+    `Opción ${nivelLabel} ✓`;
+
+  updatePrices();
+
+  // Show result
+  document.getElementById(`screen-${state.currentStep}`).classList.remove('active');
+  document.getElementById('topbar').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('price-ticker').style.display = 'none';
+  document.getElementById('screen-result').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERSISTENCE
+══════════════════════════════════════════════════════════════ */
+function saveToLocal() {
+  try {
+    const save = { ...state, zonas: [...state.zonas] };
+    localStorage.setItem('ofi_config', JSON.stringify(save));
+  } catch(e) {}
+}
+
+function saveProgress() {
+  saveToLocal();
+  const email = document.getElementById('f-email')?.value?.trim();
+  if (email) {
+    alert(`Progreso guardado. Te enviamos un enlace a ${email} para continuar cuando quieras.`);
+  } else {
+    alert('Progreso guardado localmente. Introduce tu email en el último paso para poder continuar desde otro dispositivo.');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   INIT — restore from localStorage if exists
+══════════════════════════════════════════════════════════════ */
+(function init() {
+  try {
+    const saved = localStorage.getItem('ofi_config');
+    if (saved) {
+      const s = JSON.parse(saved);
+      if (s.personas) state.personas = s.personas;
+      if (s.mobiliario) Object.assign(state.mobiliario, s.mobiliario);
+      if (s.nivel) state.nivel = s.nivel;
+      if (s.zonas) state.zonas = new Set(s.zonas);
+    }
+  } catch(e) {}
+  updatePrices();
+})();
+</script>
+</body>
+</html>

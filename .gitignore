@@ -49,6 +49,10 @@ frontend/capture-intros.mjs
 frontend/logo-ofiponiente.png
 frontend/preview-*.html
 
+# Build artifacts
+tsconfig.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
+
 # IDEs
 .vscode/
 .idea/
