@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A — Luz del Sur · Ofiponiente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #EDE5D8;
+    --green: #1A3D2B;
+    --green-light: #2C6044;
+    --green-accent: #3A7D57;
+    --charcoal: #1C1C1C;
+    --text-muted: #6B6456;
+    --gold: #C9A45A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(245,240,232,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,61,43,0.08);
+  }
+  .logo {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--green);
+    letter-spacing: -0.03em;
+  }
+  .logo span { color: var(--gold); }
+  nav ul {
+    display: flex; gap: 36px; list-style: none;
+  }
+  nav ul a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--charcoal);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    letter-spacing: 0.01em;
+  }
+  nav ul a:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--green);
+    color: var(--cream) !important;
+    opacity: 1 !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    text-decoration: none;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--green-light) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 80px 48px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(26,61,43,0.08);
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    width: fit-content;
+    margin-bottom: 32px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green-accent);
+    border-radius: 50%;
+  }
+  .hero-headline {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px, 5.5vw, 88px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--charcoal);
+    margin-bottom: 28px;
+  }
+  .hero-headline em {
+    font-style: normal;
+    color: var(--green);
+  }
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin-bottom: 48px;
+  }
+  .hero-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-primary {
+    background: var(--green);
+    color: var(--cream);
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); }
+  .btn-secondary {
+    color: var(--charcoal);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .btn-secondary:hover { opacity: 1; }
+  .btn-secondary svg { transition: transform 0.2s; }
+  .btn-secondary:hover svg { transform: translateX(4px); }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: flex; gap: 40px;
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(26,61,43,0.12);
+  }
+  .stat-num {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    color: var(--green);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* HERO RIGHT */
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--cream-dark);
+  }
+  .hero-img-grid {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+  }
+  .hero-img-cell {
+    background: #D4CEC4;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-cell:first-child {
+    grid-column: 1 / -1;
+    background: #BEB8AE;
+  }
+  .img-label {
+    position: absolute; bottom: 16px; left: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(28,28,28,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .office-scene {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* SVG office illustration */
+
+  /* MARQUEE */
+  .marquee-section {
+    background: var(--green);
+    padding: 18px 0;
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 28s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.6);
+    padding: 0 48px;
+    flex-shrink: 0;
+  }
+  .marquee-item.accent { color: var(--gold); }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* CATEGORIES */
+  .section { padding: 120px 48px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 4vw, 56px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    max-width: 14ch;
+    margin-bottom: 64px;
+    color: var(--charcoal);
+  }
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .category-card {
+    background: var(--cream-dark);
+    padding: 32px 28px 28px;
+    cursor: pointer;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .category-card:hover { background: var(--green); }
+  .category-card:hover .cat-name { color: var(--cream); }
+  .category-card:hover .cat-count { color: rgba(245,240,232,0.5); }
+  .category-card:hover .cat-icon { background: rgba(245,240,232,0.1); color: var(--cream); }
+  .cat-icon {
+    width: 48px; height: 48px;
+    background: rgba(26,61,43,0.08);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 48px;
+    color: var(--green);
+    transition: all 0.25s;
+  }
+  .cat-name {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--charcoal);
+    transition: color 0.25s;
+    margin-bottom: 4px;
+  }
+  .cat-count {
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: color 0.25s;
+  }
+
+  /* BRANDS */
+  .brands-section {
+    background: var(--cream-dark);
+    padding: 80px 48px;
+  }
+  .brands-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1px;
+  }
+  .brand-pill {
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 12px;
+    background: var(--cream);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: rgba(28,28,28,0.35);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .brand-pill:hover { color: var(--green); background: #fff; }
+
+  /* CTA */
+  .cta-section {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    background: var(--green);
+  }
+  .cta-headline {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(40px, 4vw, 64px);
+    letter-spacing: -0.04em;
+    line-height: 1.0;
+    color: var(--cream);
+  }
+  .cta-headline span { color: var(--gold); }
+  .cta-right { }
+  .cta-text {
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.65);
+    margin-bottom: 36px;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--green);
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    display: inline-block;
+    transition: transform 0.15s, filter 0.15s;
+  }
+  .btn-gold:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+  /* FOOTER */
+  footer {
+    background: #111;
+    padding: 60px 48px 40px;
+    color: rgba(245,240,232,0.5);
+  }
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 32px;
+  }
+  .footer-logo {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--cream);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline { font-size: 14px; margin-top: 6px; opacity: 0.5; }
+  .footer-info { font-size: 13px; line-height: 1.8; }
+  .footer-bottom {
+    display: flex; justify-content: space-between;
+    font-size: 12px; opacity: 0.4;
+  }
+
+  /* PREVIEW BADGE */
+  .preview-badge {
+    position: fixed; bottom: 24px; left: 24px; z-index: 1000;
+    background: rgba(26,61,43,0.95);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(245,240,232,0.15);
+  }
+  .preview-badge strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Ofi<span>poniente</span></div>
+  <ul>
+    <li><a href="#">Catálogo</a></li>
+    <li><a href="#">Marcas</a></li>
+    <li><a href="#">Proyectos</a></li>
+    <li><a href="#">Nosotros</a></li>
+    <li><a href="#" class="nav-cta">Pedir presupuesto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">El Ejido · Almería · Desde 1994</div>
+    <h1 class="hero-headline">
+      Espacios de<br><em>trabajo</em><br>que inspiran.
+    </h1>
+    <p class="hero-sub">
+      Distribuidor oficial de las mejores marcas europeas de mobiliario de oficina. Diseñamos y equipamos espacios de trabajo en Almería desde hace 30 años.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Solicitar presupuesto
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-secondary">
+        Ver catálogo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num" data-count="30">30+</div>
+        <div class="stat-label">Años de<br>experiencia</div>
+      </div>
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Fabricantes<br>premium</div>
+      </div>
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Proyectos<br>realizados</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-grid">
+      <div class="hero-img-cell" style="background: #C8C2B8;">
+        <svg width="100%" height="100%" viewBox="0 0 600 300" fill="none" preserveAspectRatio="xMidYMid slice">
+          <!-- Office scene: desk, chair, window -->
+          <rect width="600" height="300" fill="#C8C2B8"/>
+          <!-- Floor -->
+          <rect y="220" width="600" height="80" fill="#B8B2A8"/>
+          <!-- Wall accent -->
+          <rect x="0" y="0" width="600" height="220" fill="#CAC4BA"/>
+          <!-- Window -->
+          <rect x="80" y="30" width="180" height="160" rx="2" fill="#E8E4DC" opacity="0.6"/>
+          <rect x="80" y="30" width="180" height="160" rx="2" stroke="#9E9890" stroke-width="1"/>
+          <line x1="170" y1="30" x2="170" y2="190" stroke="#9E9890" stroke-width="1"/>
+          <line x1="80" y1="110" x2="260" y2="110" stroke="#9E9890" stroke-width="1"/>
+          <!-- Desk -->
+          <rect x="300" y="160" width="260" height="8" rx="2" fill="#8A7E6E"/>
+          <rect x="300" y="168" width="6" height="52" fill="#7A6E5E"/>
+          <rect x="554" y="168" width="6" height="52" fill="#7A6E5E"/>
+          <!-- Monitor -->
+          <rect x="370" y="100" width="120" height="68" rx="4" fill="#2A2A2A"/>
+          <rect x="373" y="103" width="114" height="62" rx="3" fill="#1C1C1C"/>
+          <rect x="425" y="168" width="10" height="12" fill="#2A2A2A"/>
+          <rect x="415" y="178" width="30" height="3" rx="1" fill="#2A2A2A"/>
+          <!-- Chair -->
+          <ellipse cx="360" cy="215" rx="30" ry="8" fill="#4A4A4A" opacity="0.3"/>
+          <rect x="340" y="170" width="40" height="50" rx="6" fill="#3A3A3A"/>
+          <rect x="336" y="165" width="48" height="30" rx="6" fill="#444"/>
+          <!-- Plant -->
+          <rect x="540" y="190" width="16" height="30" rx="2" fill="#7A6E5E"/>
+          <ellipse cx="548" cy="185" rx="18" ry="25" fill="#3A7D57" opacity="0.7"/>
+          <ellipse cx="533" cy="178" rx="12" ry="18" fill="#2C6044" opacity="0.8"/>
+          <ellipse cx="560" cy="182" rx="10" ry="15" fill="#3A7D57" opacity="0.6"/>
+        </svg>
+        <div class="img-label">Espacio de trabajo</div>
+      </div>
+      <div class="hero-img-cell" style="background: #D8D2C8;">
+        <svg width="100%" height="100%" viewBox="0 0 300 200" fill="none" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="200" fill="#D4CEC4"/>
+          <!-- Chair illustration -->
+          <rect x="80" y="60" width="140" height="90" rx="8" fill="#2A2A2A"/>
+          <rect x="75" y="55" width="150" height="40" rx="8" fill="#333"/>
+          <rect x="85" y="148" width="130" height="8" rx="4" fill="#1A3D2B"/>
+          <rect x="110" y="155" width="20" height="30" fill="#1A3D2B"/>
+          <rect x="170" y="155" width="20" height="30" fill="#1A3D2B"/>
+          <ellipse cx="150" cy="190" rx="50" ry="8" fill="#1A3D2B" opacity="0.2"/>
+        </svg>
+        <div class="img-label">Sillería ergonómica</div>
+      </div>
+      <div class="hero-img-cell" style="background: #E0DAD0;">
+        <svg width="100%" height="100%" viewBox="0 0 300 200" fill="none" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="200" fill="#DDD7CD"/>
+          <!-- Bookshelf/storage -->
+          <rect x="40" y="20" width="220" height="160" rx="4" fill="#8A7E6E" opacity="0.4"/>
+          <rect x="45" y="25" width="210" height="30" rx="2" fill="#C9A45A" opacity="0.3"/>
+          <rect x="45" y="60" width="210" height="30" rx="2" fill="#C9A45A" opacity="0.2"/>
+          <rect x="45" y="95" width="210" height="30" rx="2" fill="#C9A45A" opacity="0.25"/>
+          <rect x="45" y="130" width="210" height="30" rx="2" fill="#C9A45A" opacity="0.2"/>
+          <!-- Books -->
+          <rect x="50" y="28" width="12" height="24" rx="1" fill="#1A3D2B"/>
+          <rect x="64" y="30" width="8" height="22" rx="1" fill="#C9A45A"/>
+          <rect x="74" y="29" width="10" height="23" rx="1" fill="#3A3A3A"/>
+          <rect x="86" y="31" width="14" height="21" rx="1" fill="#2C6044"/>
+        </svg>
+        <div class="img-label">Archivo y almacenaje</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE BRANDS -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item accent">· Distribuidores Oficiales ·</span>
+    <span class="marquee-item">HAWORTH</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">FORMA 5</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">ACTIU</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">SEDUS</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">JG GROUP</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">MEPEL</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">AIC</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">JMM</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item accent">· Distribuidores Oficiales ·</span>
+    <span class="marquee-item">HAWORTH</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">FORMA 5</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">ACTIU</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">SEDUS</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">JG GROUP</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">MEPEL</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">AIC</span>
+    <span class="marquee-item accent">·</span>
+    <span class="marquee-item">JMM</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="section-label">Lo que equipamos</div>
+  <h2 class="section-title">Todo para tu oficina.</h2>
+  <div class="categories-grid">
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/></svg>
+      </div>
+      <div class="cat-name">Mobiliario</div>
+      <div class="cat-count">Mesas · Escritorios · Sistemas</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+      </div>
+      <div class="cat-name">Sillería</div>
+      <div class="cat-count">Dirección · Operativa · Visitas</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="cat-name">Colectividades</div>
+      <div class="cat-count">Salas · Formación · Espera</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="cat-name">Archivo</div>
+      <div class="cat-count">Armarios · Cajoneras · Archivadores</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </div>
+      <div class="cat-name">Divisiones</div>
+      <div class="cat-count">Mamparas · Paneles · Separadores</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="cat-name">Complementos</div>
+      <div class="cat-count">Accesorios · Iluminación · Textil</div>
+    </div>
+    <div class="category-card">
+      <div class="cat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+      </div>
+      <div class="cat-name">Bibliotecas</div>
+      <div class="cat-count">Estanterías · Módulos · Sistemas</div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS ROW -->
+<div class="brands-section">
+  <div class="brands-label">Fabricantes que representamos</div>
+  <div class="brands-grid">
+    <div class="brand-pill">HAWORTH</div>
+    <div class="brand-pill">FORMA 5</div>
+    <div class="brand-pill">ACTIU</div>
+    <div class="brand-pill">SEDUS</div>
+    <div class="brand-pill">JG GROUP</div>
+    <div class="brand-pill">MEPEL</div>
+    <div class="brand-pill">AIC</div>
+    <div class="brand-pill">JMM</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div>
+    <h2 class="cta-headline">¿Equipamos<br>tu <span>próxima</span><br>oficina?</h2>
+  </div>
+  <div class="cta-right">
+    <p class="cta-text">Cuéntanos tu proyecto. Te preparamos un presupuesto detallado sin compromiso, con los mejores materiales y fabricantes europeos. Respuesta en 24h.</p>
+    <a href="#" class="btn-gold">Solicitar presupuesto gratuito</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Ofi<span>poniente</span></div>
+      <div class="footer-tagline">Mobiliario de oficina · El Ejido, Almería</div>
+    </div>
+    <div class="footer-info">
+      <div>C/ Ejemplo, 14 · 04700 El Ejido, Almería</div>
+      <div>info@ofiponiente.es · 950 000 000</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ofiponiente S.L. — Distribuidores oficiales desde 1994</span>
+    <span>Aviso legal · Privacidad</span>
+  </div>
+</footer>
+
+<div class="preview-badge">
+  <strong>Dirección A</strong> — Luz del Sur (Cream + Verde)
+</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+gsap.from('.hero-tag', { opacity: 0, y: 20, duration: 0.8, delay: 0.3, ease: 'power3.out' });
+gsap.from('.hero-headline', { opacity: 0, y: 40, duration: 0.9, delay: 0.5, ease: 'power3.out' });
+gsap.from('.hero-sub', { opacity: 0, y: 30, duration: 0.8, delay: 0.7, ease: 'power3.out' });
+gsap.from('.hero-actions', { opacity: 0, y: 20, duration: 0.7, delay: 0.9, ease: 'power3.out' });
+gsap.from('.hero-stats', { opacity: 0, y: 20, duration: 0.7, delay: 1.1, ease: 'power3.out' });
+gsap.from('.hero-right', { opacity: 0, x: 40, duration: 1.0, delay: 0.4, ease: 'power3.out' });
+
+// Category cards stagger on scroll
+gsap.from('.category-card', {
+  scrollTrigger: { trigger: '.categories-grid', start: 'top 80%' },
+  opacity: 0, y: 40, duration: 0.6, stagger: 0.08, ease: 'power3.out'
+});
+
+// CTA section
+gsap.from('.cta-headline', {
+  scrollTrigger: { trigger: '.cta-section', start: 'top 75%' },
+  opacity: 0, x: -50, duration: 0.8, ease: 'power3.out'
+});
+gsap.from('.cta-right', {
+  scrollTrigger: { trigger: '.cta-section', start: 'top 75%' },
+  opacity: 0, x: 50, duration: 0.8, delay: 0.15, ease: 'power3.out'
+});
+</script>
+</body>
+</html>
