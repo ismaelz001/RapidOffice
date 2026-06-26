@@ -53,3 +53,14 @@ test('home and category pages use the real quote request form', async () => {
   assert.doesNotMatch(categorySource, /type="button" className="bg-ofi-black/);
 });
 
+test('planner submits its configuration as a quote request', async () => {
+  const plannerSource = await read('public/planifica-tu-espacio/index.html');
+
+  assert.match(plannerSource, /fetch\('\/api\/quote-requests'/);
+  assert.match(plannerSource, /source:\s*'planner'/);
+  assert.match(plannerSource, /customerName:\s*state\.contacto\.nombre/);
+  assert.match(plannerSource, /phone:\s*state\.contacto\.telefono/);
+  assert.match(plannerSource, /buildPlannerQuoteMessage/);
+  assert.match(plannerSource, /localStorage\.setItem\('ofi_config'/);
+  assert.match(plannerSource, /result-request-id/);
+});

@@ -41,11 +41,11 @@
 
 ## 2.6 Planner
 
-- [ ] Localizar CTA final actual del HTML.
-- [ ] Leer `ofi_config` de `localStorage`.
-- [ ] Enviar resumen a `/api/quote-requests`.
-- [ ] Usar `source = planner`.
-- [ ] Confirmar sin cambiar diseño.
+- [x] Localizar CTA final actual del HTML.
+- [x] Leer estado actual del planner y mantener guardado `ofi_config` en `localStorage`.
+- [x] Enviar resumen a `/api/quote-requests`.
+- [x] Usar `source = planner`.
+- [x] Confirmar sin cambiar diseño.
 
 ## 2.7 Tests y validación
 

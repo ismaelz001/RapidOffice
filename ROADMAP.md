@@ -58,8 +58,9 @@
 - [x] Conectar home CTA → form → `quote_requests` Supabase
 - [x] Conectar categorías → "Solicitar presupuesto" → `quote_requests`
 - [ ] Conectar catálogo/reacondicionado global → "Solicitar presupuesto" → `quote_requests` si hace falta
-- [ ] Guardar planner state → `quote_request_items`
-- [ ] Source tracking (home / catálogo / planner)
+- [x] Guardar planner state → `quote_requests` como resumen comercial
+- [ ] Guardar productos concretos → `quote_request_items` cuando existan `product_id`
+- [x] Source tracking (home / categoría / planner)
 - [ ] Email de confirmación automático
 - [ ] UX de éxito (toast + número de solicitud)
 
@@ -104,5 +105,5 @@
 
 ---
 
-**Última actualización:** 2026-06-25 (post-Fase-1)
+**Última actualización:** 2026-06-26 (Fase 2 en curso)
 **Próximo checkpoint:** Después de Fase 2

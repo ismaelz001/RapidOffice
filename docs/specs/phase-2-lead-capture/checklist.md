@@ -21,9 +21,9 @@
 
 ## UX
 
-- [ ] No mostrar precios falsos en pasos tempranos del planner.
+- [x] No mostrar precios falsos en pasos tempranos del planner.
 - [ ] Mantener CTA claro.
-- [ ] Mostrar éxito.
+- [x] Mostrar éxito.
 - [ ] Mostrar error entendible.
 - [ ] No perder los datos del formulario si falla.
 - [ ] Revisar móvil.

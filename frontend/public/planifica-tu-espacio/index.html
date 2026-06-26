@@ -1202,6 +1202,7 @@
 
       <div class="result-disclaimer">
         Enviamos confirmación a <strong id="result-email">tu email</strong>.<br />
+        Solicitud registrada: <strong id="result-request-id">pendiente</strong>.<br />
         Tu presupuesto final revisado llegará en <strong>menos de 24 horas laborables</strong>.
         Un asesor de Ofiponiente revisará tu configuración y podrá sugerir ajustes.
       </div>
@@ -1479,17 +1480,79 @@ function checkForm() {
   document.getElementById('btn-submit').disabled = !(nombre && email && telefono && consent);
 }
 
-function submitForm() {
+function buildPlannerQuoteMessage() {
+  const zonas = [...state.zonas];
+  const precios = calculatePrices();
+  const nivelLabel = { basico:'Básico', estandar:'Estándar', premium:'Premium' }[state.nivel] || 'Estándar';
+  const proyectoLabel = {
+    nueva: 'Oficina nueva',
+    reforma: 'Reforma / renovación',
+    ampliacion: 'Ampliación',
+    teletrabajo: 'Teletrabajo / home office',
+  }[state.tipoProyecto] || state.tipoProyecto || 'No indicado';
+
+  return [
+    'Solicitud generada desde el planner de espacios.',
+    `Tipo de proyecto: ${proyectoLabel}`,
+    `Personas: ${state.personas}`,
+    `Nivel seleccionado: ${nivelLabel}`,
+    `Mobiliario: ${state.mobiliario.mesas} mesas, ${state.mobiliario.sillas} sillas, ${state.mobiliario.elevables} elevables, ${state.mobiliario.cajoneras} cajoneras, ${state.mobiliario.armarios} armarios`,
+    `Reunión: ${state.reunion.tiene === 'si' ? `${state.reunion.salas} sala(s), ${state.reunion.personas} personas, mesa ${state.reunion.mesa}` : 'No indicada'}`,
+    `Zonas adicionales: ${zonas.length ? zonas.join(', ') : 'No indicadas'}`,
+    `Plazo: ${state.contacto.plazo}`,
+    `Estimación orientativa: básico ${precios.basico.toLocaleString('es-ES')} €, estándar ${precios.estandar.toLocaleString('es-ES')} €, premium ${precios.premium.toLocaleString('es-ES')} €`,
+  ].join('\n');
+}
+
+async function submitForm() {
   state.contacto.nombre   = document.getElementById('f-nombre').value.trim();
   state.contacto.email    = document.getElementById('f-email').value.trim();
   state.contacto.empresa  = document.getElementById('f-empresa').value.trim();
   state.contacto.telefono = document.getElementById('f-telefono').value.trim();
+
+  const submitButton = document.getElementById('btn-submit');
+  const originalButtonText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = 'Enviando solicitud...';
+
+  let quoteRequestId = '';
+
+  try {
+    const response = await fetch('/api/quote-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName: state.contacto.nombre,
+        email: state.contacto.email,
+        phone: state.contacto.telefono,
+        company: state.contacto.empresa,
+        message: buildPlannerQuoteMessage(),
+        source: 'planner',
+        context: 'Planner de espacios de trabajo',
+        pageUrl: window.location.href,
+      }),
+    });
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || 'No hemos podido registrar la solicitud.');
+    }
+
+    quoteRequestId = result.id || '';
+    saveToLocal();
+  } catch (error) {
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
+    alert(error.message || 'No hemos podido registrar la solicitud. Inténtalo de nuevo.');
+    return;
+  }
 
   // Build result
   const nivelLabel = { basico:'Básico', estandar:'Estándar', premium:'Premium' }[state.nivel] || 'Estándar';
   document.getElementById('result-sub').textContent =
     `Oficina para ${state.personas} persona${state.personas !== 1 ? 's' : ''} · Nivel ${nivelLabel}`;
   document.getElementById('result-email').textContent = state.contacto.email;
+  document.getElementById('result-request-id').textContent = quoteRequestId ? quoteRequestId.slice(0, 8) : 'recibida';
 
   // Summary tags
   const tags = [

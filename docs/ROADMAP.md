@@ -10,7 +10,7 @@
 
 ```
 Fase 1: [████████████████] 100% ✅ COMPLETADA
-Fase 2: [████░░░░░░░░░░░░] 25%
+Fase 2: [██████████░░░░░░] 60%
 Fase 3: [░░░░░░░░░░░░░░░░] 0%
 Fase 4: [░░░░░░░░░░░░░░░░] 0%
 Fase 5: [░░░░░░░░░░░░░░░░] 0%
@@ -65,19 +65,19 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 #### 2.1 — Formularios de captura en home + catálogos
 - [x] Diseñar/refinar formulario mínimo de solicitud
 - [x] Conectar home CTA form → `quote_requests` table
-- [ ] Conectar catálogo page → inline "Solicitar presupuesto" button
+- [x] Conectar categorías → inline "Solicitar presupuesto" button
 - [x] Conectar categoría page → "Presupuesto" form con contexto de categoría
 - [ ] Conectar reacondicionado page → "Alerta de stock" form
 
 #### 2.2 — Persistencia del planner actual
-- [ ] Evaluar si el HTML actual puede enviar un lead mínimo sin rediseño
-- [ ] Guardar estado básico del planner en `quote_requests`
+- [x] Evaluar si el HTML actual puede enviar un lead mínimo sin rediseño
+- [x] Guardar estado básico del planner en `quote_requests`
 - [ ] Guardar selección/productos si aplica en `quote_request_items`
-- [ ] Mantener el diseño actual salvo ajuste mínimo necesario para enviar datos
+- [x] Mantener el diseño actual salvo ajuste mínimo necesario para enviar datos
 
 #### 2.3 — Source tracking + metadatos
-- [ ] Usar y normalizar la columna `source` ya existente en `quote_requests` (home / catálogo / reacondicionado / planner)
-- [ ] Capturar timestamp, user-agent, URL origen
+- [x] Usar y normalizar la columna `source` ya existente en `quote_requests` (home / categoría / planner)
+- [x] Capturar timestamp por `created_at` y URL origen en el mensaje/contexto
 - [ ] Opcional: identificar usuario anónimo (cookie tracking)
 
 #### 2.4 — UX de confirmación
@@ -449,5 +449,5 @@ Total: 12 semanas (3 meses) para MVP completo y optimizado
 
 ---
 
-**Última actualización:** 2026-06-25
+**Última actualización:** 2026-06-26
 **Próxima revisión:** Después de completar Fase 2
