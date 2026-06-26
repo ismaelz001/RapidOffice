@@ -1278,6 +1278,14 @@ function calcPrice(nivel) {
   return Math.round(total / 100) * 100;
 }
 
+function calculatePrices() {
+  return {
+    basico: calcPrice('basico'),
+    estandar: calcPrice('estandar'),
+    premium: calcPrice('premium'),
+  };
+}
+
 function fmt(n) {
   return n.toLocaleString('es-ES');
 }
@@ -1497,7 +1505,7 @@ function buildPlannerQuoteMessage() {
     `Personas: ${state.personas}`,
     `Nivel seleccionado: ${nivelLabel}`,
     `Mobiliario: ${state.mobiliario.mesas} mesas, ${state.mobiliario.sillas} sillas, ${state.mobiliario.elevables} elevables, ${state.mobiliario.cajoneras} cajoneras, ${state.mobiliario.armarios} armarios`,
-    `Reunión: ${state.reunion.tiene === 'si' ? `${state.reunion.salas} sala(s), ${state.reunion.personas} personas, mesa ${state.reunion.mesa}` : 'No indicada'}`,
+    `Reunión: ${state.reunion.tiene === 'si' ? `${state.reunion.salas} sala(s), ${state.reunion.capacidad} personas, mesa ${state.reunion.mesa}` : 'No indicada'}`,
     `Zonas adicionales: ${zonas.length ? zonas.join(', ') : 'No indicadas'}`,
     `Plazo: ${state.contacto.plazo}`,
     `Estimación orientativa: básico ${precios.basico.toLocaleString('es-ES')} €, estándar ${precios.estandar.toLocaleString('es-ES')} €, premium ${precios.premium.toLocaleString('es-ES')} €`,

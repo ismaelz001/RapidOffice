@@ -61,6 +61,8 @@ test('planner submits its configuration as a quote request', async () => {
   assert.match(plannerSource, /customerName:\s*state\.contacto\.nombre/);
   assert.match(plannerSource, /phone:\s*state\.contacto\.telefono/);
   assert.match(plannerSource, /buildPlannerQuoteMessage/);
+  assert.match(plannerSource, /function calculatePrices\(\)/);
+  assert.doesNotMatch(plannerSource, /state\.reunion\.personas/);
   assert.match(plannerSource, /localStorage\.setItem\('ofi_config'/);
   assert.match(plannerSource, /result-request-id/);
 });
