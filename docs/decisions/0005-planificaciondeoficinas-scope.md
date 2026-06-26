@@ -1,4 +1,4 @@
-# 0005 — Scope de planificacion-de-oficinas: archivado, no integrar
+# 0005 — Scope de planificaciondeoficinas.com: dominio futuro, no ejecutar ahora
 
 ## Estado
 
@@ -6,7 +6,11 @@ Aceptada.
 
 ## Decisión
 
-El directorio `planificacion-de-oficinas/` ha sido **archivado** y no se integrará como submódulo ni proyecto paralelo.
+`planificaciondeoficinas.com` será un dominio futuro para el flujo de planificación cuando el PO confirme que el dominio está listo y haya que activarlo.
+
+Hasta ese momento, **no se trabaja el dominio**, no se configura despliegue específico y no se abre una línea técnica paralela.
+
+El directorio local `planificacion-de-oficinas/` ha sido **archivado** para evitar confusión con el frontend principal.
 
 Su único fichero de valor (`configurador-preview.html`) se conserva en `docs/archive/planificacion-de-oficinas/` como referencia de diseño.
 
@@ -18,21 +22,23 @@ Su único fichero de valor (`configurador-preview.html`) se conserva en `docs/ar
 - Un único fichero útil: `configurador-preview.html` (preview visual del cuestionario).
 - Sin código de producción relevante no ya presente en el frontend principal.
 
-Mantenerlo activo suponía:
+Mantener el prototipo local activo suponía:
 - Confusión sobre cuál es el proyecto real.
 - Doble gestión de dependencias.
 - Contradicción con la arquitectura documentada (un único Next.js en `frontend/`).
 
-## Decisión técnica: el planner va en `frontend/`
+## Decisión técnica actual
 
-El planificador de espacios se construirá como ruta dentro del proyecto Next.js principal:
-- Ruta: `/planifica-tu-espacio` (ya existe como landing estática).
-- Cuestionario guiado: componentes React en `frontend/app/(public)/planifica-tu-espacio/`.
-- Persistencia: Supabase tabla `quote_requests` + `quote_request_items` (ya existen).
-- No habrá proyecto separado, ni deploy separado para el planner.
+De momento:
+
+- El flujo visible sigue en Ofiponiente mediante `/planifica-tu-espacio`.
+- El preview actual vive en `frontend/public/planifica-tu-espacio/index.html`.
+- El dominio `planificaciondeoficinas.com` queda **fuera del alcance activo** hasta nueva instrucción del PO.
+- Cuando el PO confirme el dominio, se decidirá si será dominio alias, landing dedicada, proyecto separado o ruta servida desde el frontend principal.
 
 ## Consecuencias
 
 - `planificacion-de-oficinas/` eliminado del árbol de trabajo.
 - El preview HTML archivado es solo referencia visual, no fuente de verdad.
-- Todo trabajo del planner ocurre en `frontend/` bajo los standards documentados.
+- No se debe reabrir trabajo sobre `planificaciondeoficinas.com` hasta que el PO lo solicite explícitamente.
+- El roadmap debe marcar este punto como **aparcado**, no como bloqueante.

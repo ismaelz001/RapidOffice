@@ -1,7 +1,7 @@
 # Ofiponiente Digital — Roadmap Ejecutivo
 
-**Proyecto:** Plataforma B2B SaaS para venta de mobiliario de oficina y soluciones de espacios de trabajo.  
-**Stack:** Next.js 16.2.5 + Supabase + Tailwind CSS  
+**Proyecto:** Plataforma B2B SaaS para venta de mobiliario de oficina y soluciones de espacios de trabajo.
+**Stack:** Next.js 14.0.4 + Supabase + Tailwind CSS
 **Versión:** Roadmap 1.0 (actualizado 2026-06-25)
 
 ---
@@ -30,18 +30,19 @@ Total MVP: 60% → 70% (post-Fase1)
 
 ### Tareas completadas:
 - [x] Archivar `backend/` (FastAPI legacy) → `docs/archive/legacy-backend/backend/`
-- [x] Archivar `planificacion-de-oficinas/` → `docs/archive/planificacion-de-oficinas/`
+- [x] Archivar prototipo local `planificacion-de-oficinas/` → `docs/archive/planificacion-de-oficinas/`
 - [x] Documento ADR 0004: Backend Architecture (Supabase client-only, sin FastAPI)
-- [x] Documento ADR 0005: Planificacion scope (solo en `frontend/`, archivado prototipo)
+- [x] Documento ADR 0005: `planificaciondeoficinas.com` como dominio futuro aparcado hasta aviso del PO
 - [x] Auditar 8 agents — remover refs FastAPI/Neon/JWT legacy ✅
 - [x] Auditar docs/ — refs legacy solo en archivos históricos ✅
 - [x] Limpiar `.gitignore` (agregar `tsconfig.tsbuildinfo`)
 - [x] Validar `git status` — repo raíz clean ✅
 
 ### Resultado:
-✅ **Arquitectura clara, decidida, documentada.**  
-✅ **Ninguna deuda técnica bloqueante en el código activo.**  
+✅ **Arquitectura clara, decidida, documentada.**
+✅ **Ninguna deuda técnica bloqueante en el código activo.**
 ✅ **ADRs disponibles para futuras decisiones.**
+⏸️ **`planificaciondeoficinas.com` queda fuera del alcance activo hasta nueva instrucción del PO.**
 
 **Referencia:**
 - [ADR 0004 — Backend Architecture](docs/decisions/0004-backend-architecture.md)
@@ -51,8 +52,8 @@ Total MVP: 60% → 70% (post-Fase1)
 
 ## 🔄 Fase 2 — Captación real de leads
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 1 ✅ completada  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 1 ✅ completada
 **Timeline estimado:** 1-2 sprints
 
 ### Descripción:
@@ -67,13 +68,14 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 - [ ] Conectar categoría page → "Presupuesto" form con pre-filter
 - [ ] Conectar reacondicionado page → "Alerta de stock" form
 
-#### 2.2 — Persistencia del planner
-- [ ] Guardar estado del planner en `quote_requests` + `quote_request_items`
-- [ ] Serializar configuración de espacios (layout JSON)
-- [ ] Adjuntar lista de productos seleccionados
+#### 2.2 — Persistencia del planner actual
+- [ ] Evaluar si el HTML actual puede enviar un lead mínimo sin rediseño
+- [ ] Guardar estado básico del planner en `quote_requests`
+- [ ] Guardar selección/productos si aplica en `quote_request_items`
+- [ ] Mantener el diseño actual salvo ajuste mínimo necesario para enviar datos
 
 #### 2.3 — Source tracking + metadatos
-- [ ] Agregar columna `source` a `quote_requests` (home / catálogo / reacondicionado / planner)
+- [ ] Usar y normalizar la columna `source` ya existente en `quote_requests` (home / catálogo / reacondicionado / planner)
 - [ ] Capturar timestamp, user-agent, URL origen
 - [ ] Opcional: identificar usuario anónimo (cookie tracking)
 
@@ -85,12 +87,19 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 
 ### Archivos a modificar:
 ```
-frontend/app/(public)/page.tsx              — home form
+frontend/app/page.tsx                       — home form
 frontend/app/mobiliario/[category]/page.tsx — category form
 frontend/app/mobiliario/page.tsx            — reacondicionado form
-frontend/app/planifica-tu-espacio/page.tsx  — planner persistence
-frontend/lib/api.ts                         — migrar a Supabase Auth
+frontend/public/planifica-tu-espacio/index.html — planner actual estático
+frontend/lib/catalog.ts                     — revisar acceso a Supabase si hace falta
 ```
+
+### Fuera de alcance en Fase 2:
+- Configurar `planificaciondeoficinas.com`.
+- Crear un deploy/proyecto separado para planificación.
+- Rediseñar por completo el planner.
+- Construir el CRM completo.
+- Implementar pagos o anticipo 50%.
 
 ### Validación:
 - `npm run dev` → test 3 formularios en navegador
@@ -101,8 +110,8 @@ frontend/lib/api.ts                         — migrar a Supabase Auth
 
 ## 🏢 Fase 3 — CRM interno (gestión de leads)
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 2 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 2 ✅
 **Timeline estimado:** 1 sprint
 
 ### Descripción:
@@ -145,8 +154,8 @@ frontend/lib/lead-management.ts                 — helper functions
 
 ## 📄 Fase 4 — Páginas de productos individuales
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 2 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 2 ✅
 **Timeline estimado:** 1-2 sprints
 
 ### Descripción:
@@ -191,8 +200,8 @@ frontend/lib/product-schema.ts                     — structured data
 
 ## 🏷️ Fase 5 — Páginas de categorías mejoradas
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 4 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 4 ✅
 **Timeline estimado:** 1 sprint
 
 ### Descripción:
@@ -230,8 +239,8 @@ Cada categoría (Escritorios, Sillas, etc.) tiene página dedicada con hero, int
 
 ## 📝 Fase 6 — Blog de contenido + SEO
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 5 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 5 ✅
 **Timeline estimado:** 2-3 sprints
 
 ### Descripción:
@@ -280,8 +289,8 @@ content/blog/                              — artículos en markdown
 
 ## 🚀 Fase 7 — Optimización SEO + velocidad
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 6 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 6 ✅
 **Timeline estimado:** 1 sprint
 
 ### Descripción:
@@ -322,8 +331,8 @@ Core Web Vitals, images optimization, lazy loading, structured data global, robo
 
 ## 💌 Fase 8 — Automatización de emails + seguimiento
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 3 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 3 ✅
 **Timeline estimado:** 1 sprint
 
 ### Descripción:
@@ -356,8 +365,8 @@ Workflows de email para dar seguimiento automático a leads: confirmación, reco
 
 ## 📊 Fase 9 — Analytics avanzado + reporte
 
-**Estado:** PENDIENTE  
-**Requisito previo:** Fase 8 ✅  
+**Estado:** PENDIENTE
+**Requisito previo:** Fase 8 ✅
 **Timeline estimado:** 1-2 sprints
 
 ### Descripción:
@@ -439,5 +448,5 @@ Total: 12 semanas (3 meses) para MVP completo y optimizado
 
 ---
 
-**Última actualización:** 2026-06-25  
+**Última actualización:** 2026-06-25
 **Próxima revisión:** Después de completar Fase 2

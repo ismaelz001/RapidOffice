@@ -4,13 +4,15 @@
 
 **¿Qué sigue?** Fase 2 → captación real de leads (formularios → Supabase).
 
+**Aparcado explícitamente:** `planificaciondeoficinas.com`. El PO avisará cuándo el dominio esté listo. Hasta entonces no se configura dominio, deploy ni proyecto separado.
+
 ---
 
 ## 📊 Progreso rápido
 
 | Fase | Estado | Descripción | Timeline |
 |------|--------|-------------|----------|
-| **1** | ✅ DONE | Limpieza arquitectónica, archivar legacy backend/planner | Completado |
+| **1** | ✅ DONE | Limpieza arquitectónica, archivar legacy backend/prototipo local | Completado |
 | **2** | 🔄 NEXT | Lead capture (formularios → Supabase quote_requests) | 1-2 sprints |
 | **3** | ⏳ PLAN | CRM interno (dashboard de leads, seguimiento) | 1 sprint |
 | **4** | ⏳ PLAN | Páginas de productos individuales | 1-2 sprints |
@@ -26,9 +28,9 @@
 
 ## 🔍 Cómo leer esto
 
-1. **Para vision general:** Vee este archivo  
-2. **Para detalles completos:** [docs/ROADMAP.md](docs/ROADMAP.md) — tareas específicas, archivos a modificar, validación  
-3. **Para arquitectura:** [docs/decisions/](docs/decisions/) — ADRs 0001-0005  
+1. **Para visión general:** Lee este archivo
+2. **Para detalles completos:** [docs/ROADMAP.md](docs/ROADMAP.md) — tareas específicas, archivos a modificar, validación
+3. **Para arquitectura:** [docs/decisions/](docs/decisions/) — ADRs 0001-0005
 4. **Para contexto:** [docs/master/ofiponiente-digital-master.md](docs/master/ofiponiente-digital-master.md)
 
 ---
@@ -37,9 +39,10 @@
 
 ```
 ✅ Backend FastAPI → docs/archive/legacy-backend/
-✅ Planificacion-de-oficinas → docs/archive/planificacion-de-oficinas/
+✅ Prototipo local planificacion-de-oficinas → docs/archive/planificacion-de-oficinas/
+⏸️ Dominio planificaciondeoficinas.com → aparcado hasta aviso del PO
 ✅ ADR 0004: Backend Architecture (Supabase client-only)
-✅ ADR 0005: Planificacion scope (solo frontend)
+✅ ADR 0005: planificaciondeoficinas.com como dominio futuro aparcado
 ✅ 8/8 agents auditados (sin refs FastAPI/Neon)
 ✅ docs/ auditado (refs legacy solo en archivos históricos)
 ✅ Git commit + push
@@ -57,11 +60,17 @@
 - [ ] Email de confirmación automático
 - [ ] UX de éxito (toast + número de solicitud)
 
+**Qué NO se hace en Fase 2:**
+- No configurar `planificaciondeoficinas.com`.
+- No crear proyecto/deploy separado para planificación.
+- No rediseñar completo el planner.
+- No construir CRM completo todavía.
+
 **Dónde tocar:**
-- `frontend/app/(public)/page.tsx` — home form
+- `frontend/app/page.tsx` — home form
 - `frontend/app/mobiliario/page.tsx` — reacondicionado form
 - `frontend/app/mobiliario/[category]/page.tsx` — category form
-- `frontend/app/planifica-tu-espacio/page.tsx` — planner persistence
+- `frontend/public/planifica-tu-espacio/index.html` — planner actual estático
 
 **Validación:**
 - 3 formularios probados en dev
@@ -92,5 +101,5 @@
 
 ---
 
-**Última actualización:** 2026-06-25 (post-Fase-1)  
+**Última actualización:** 2026-06-25 (post-Fase-1)
 **Próximo checkpoint:** Después de Fase 2
