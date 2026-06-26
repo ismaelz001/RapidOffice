@@ -41,11 +41,11 @@
 - [x] `npx tsc --noEmit`
 - [ ] Home probado.
 - [ ] Categoría probada.
-- [ ] Planner probado.
-- [ ] Supabase revisado.
+- [x] Planner probado.
+- [x] Supabase revisado.
 
 ## Cierre
 
-- [ ] Roadmap actualizado.
-- [ ] Commit con alcance claro.
-- [ ] Push a `main`.
+- [x] Roadmap actualizado.
+- [x] Commit con alcance claro.
+- [x] Push a `main`.

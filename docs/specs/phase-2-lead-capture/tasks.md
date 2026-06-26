@@ -52,11 +52,11 @@
 - [x] Añadir test estático para endpoint/form si encaja con patrón actual.
 - [x] Ejecutar tests existentes.
 - [x] Ejecutar TypeScript.
-- [ ] Probar en navegador.
-- [ ] Revisar filas en Supabase.
+- [x] Probar en navegador.
+- [x] Revisar filas en Supabase.
 
 ## 2.8 Roadmap
 
-- [ ] Actualizar `ROADMAP.md`.
-- [ ] Actualizar `docs/ROADMAP.md`.
-- [ ] Marcar solo lo realmente terminado.
+- [x] Actualizar `ROADMAP.md`.
+- [x] Actualizar `docs/ROADMAP.md`.
+- [x] Marcar solo lo realmente terminado.
