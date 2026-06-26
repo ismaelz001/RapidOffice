@@ -10,7 +10,7 @@
 
 ```
 Fase 1: [████████████████] 100% ✅ COMPLETADA
-Fase 2: [░░░░░░░░░░░░░░░░] 0%
+Fase 2: [████░░░░░░░░░░░░] 25%
 Fase 3: [░░░░░░░░░░░░░░░░] 0%
 Fase 4: [░░░░░░░░░░░░░░░░] 0%
 Fase 5: [░░░░░░░░░░░░░░░░] 0%
@@ -52,9 +52,10 @@ Total MVP: 60% → 70% (post-Fase1)
 
 ## 🔄 Fase 2 — Captación real de leads
 
-**Estado:** PENDIENTE
+**Estado:** EN PROGRESO
 **Requisito previo:** Fase 1 ✅ completada
 **Timeline estimado:** 1-2 sprints
+**Spec operativa:** [docs/specs/phase-2-lead-capture/](specs/phase-2-lead-capture/)
 
 ### Descripción:
 Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para empezar a capturar **quote requests** reales. Esto establece el primer flow de valor: usuario → formulario → BD.
@@ -62,10 +63,10 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 ### Tareas clave:
 
 #### 2.1 — Formularios de captura en home + catálogos
-- [ ] Diseñar/refinar formularios (presupuesto, cantidad, fecha deseada)
-- [ ] Conectar home CTA form → `quote_requests` table
+- [x] Diseñar/refinar formulario mínimo de solicitud
+- [x] Conectar home CTA form → `quote_requests` table
 - [ ] Conectar catálogo page → inline "Solicitar presupuesto" button
-- [ ] Conectar categoría page → "Presupuesto" form con pre-filter
+- [x] Conectar categoría page → "Presupuesto" form con contexto de categoría
 - [ ] Conectar reacondicionado page → "Alerta de stock" form
 
 #### 2.2 — Persistencia del planner actual

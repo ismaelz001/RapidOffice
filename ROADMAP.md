@@ -13,7 +13,7 @@
 | Fase | Estado | Descripción | Timeline |
 |------|--------|-------------|----------|
 | **1** | ✅ DONE | Limpieza arquitectónica, archivar legacy backend/prototipo local | Completado |
-| **2** | 🔄 NEXT | Lead capture (formularios → Supabase quote_requests) | 1-2 sprints |
+| **2** | 🔄 IN PROGRESS | Lead capture (formularios → Supabase quote_requests) | 1-2 sprints |
 | **3** | ⏳ PLAN | CRM interno (dashboard de leads, seguimiento) | 1 sprint |
 | **4** | ⏳ PLAN | Páginas de productos individuales | 1-2 sprints |
 | **5** | ⏳ PLAN | Páginas de categorías mejoradas | 1 sprint |
@@ -52,9 +52,12 @@
 
 ## 🔄 Fase 2 — Por empezar
 
+**Spec operativa:** [docs/specs/phase-2-lead-capture/](docs/specs/phase-2-lead-capture/)
+
 **Qué hacer:**
-- [ ] Conectar home CTA → form → `quote_requests` Supabase
-- [ ] Conectar catálogo → "Solicitar presupuesto" → `quote_requests`
+- [x] Conectar home CTA → form → `quote_requests` Supabase
+- [x] Conectar categorías → "Solicitar presupuesto" → `quote_requests`
+- [ ] Conectar catálogo/reacondicionado global → "Solicitar presupuesto" → `quote_requests` si hace falta
 - [ ] Guardar planner state → `quote_request_items`
 - [ ] Source tracking (home / catálogo / planner)
 - [ ] Email de confirmación automático

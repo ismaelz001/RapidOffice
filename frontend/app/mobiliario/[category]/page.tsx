@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import QuoteRequestForm from '@/components/QuoteRequestForm';
 import {
   CATALOG_CTA_LABEL,
   catalogCategories,
@@ -182,14 +183,14 @@ export default async function CatalogCategoryPage({ params, searchParams }: Page
             Pásanos producto, unidades aproximadas y ubicación. Revisaremos stock real, montaje y alternativas equivalentes.
           </p>
         </div>
-        <form className="flex flex-col gap-4 bg-ofi-offwhite px-8 py-14 md:px-14">
-          <input className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm" placeholder="Nombre o empresa" />
-          <input className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm" placeholder="Email o teléfono" />
-          <textarea className="min-h-[110px] border border-ofi-black/20 bg-transparent px-4 py-3 text-sm" placeholder={`Me interesa ${category.name.toLowerCase()}...`} />
-          <button type="button" className="bg-ofi-black px-5 py-3.5 text-left text-sm font-semibold text-white hover:bg-ofi-pink-dark">
-            Solicitar disponibilidad
-          </button>
-        </form>
+        <QuoteRequestForm
+          source="category"
+          context={`Categoría: ${category.name}${selectedFamilyLabel ? ` · Familia reacondicionado: ${selectedFamilyLabel}` : ''}`}
+          defaultMessage={`Me interesa ${category.name.toLowerCase()}...`}
+          submitLabel="Solicitar disponibilidad"
+          formClassName="flex flex-col gap-4 bg-ofi-offwhite px-8 py-14 md:px-14"
+          buttonClassName="bg-ofi-black px-5 py-3.5 text-left text-sm font-semibold text-white hover:bg-ofi-pink-dark disabled:opacity-60"
+        />
       </section>
     </main>
   );

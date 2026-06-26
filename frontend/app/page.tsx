@@ -2,6 +2,7 @@
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import QuoteRequestForm from '@/components/QuoteRequestForm';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
@@ -887,47 +888,11 @@ export default function OfiponentePage() {
           </div>
           {/* Right: off-white form */}
           <div className="bg-ofi-offwhite px-8 md:px-14 py-16 flex flex-col justify-center">
-            <form className="flex flex-col gap-4 max-w-sm w-full" onSubmit={e => e.preventDefault()}>
-              <div data-cta className="flex flex-col gap-1">
-                <label htmlFor="contact-name" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Nombre</label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  placeholder="Tu nombre o empresa"
-                  autoComplete="name"
-                  className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors"
-                />
-              </div>
-              <div data-cta className="flex flex-col gap-1">
-                <label htmlFor="contact-email" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Email</label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  placeholder="correo@empresa.com"
-                  autoComplete="email"
-                  className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors"
-                />
-              </div>
-              <div data-cta className="flex flex-col gap-1">
-                <label htmlFor="contact-message" className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">Mensaje</label>
-                <textarea
-                  id="contact-message"
-                  rows={3}
-                  placeholder="Describe brevemente tu proyecto..."
-                  className="border border-ofi-black/20 bg-transparent px-4 py-3 text-sm placeholder:text-ofi-gray/50 focus:outline-none focus:border-ofi-pink transition-colors resize-none"
-                />
-              </div>
-              <button
-                data-cta
-                type="submit"
-                className="bg-ofi-black text-ofi-white font-semibold text-sm px-6 py-3.5 hover:bg-ofi-pink-dark transition-colors duration-200 flex items-center justify-between"
-              >
-                Enviar solicitud
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </form>
+            <QuoteRequestForm
+              source="home"
+              context="Formulario de contacto de la home"
+              submitLabel="Enviar solicitud"
+            />
           </div>
         </section>
 
