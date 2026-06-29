@@ -1,48 +1,30 @@
-# RapidOffice + Quote Frontend (MVP Phase 1)
+# Ofiponiente Digital — Frontend
 
-Este es el frontend de RapidOffice, construido con Next.js 14 y react-konva para el diseño 2D de oficinas.
+Aplicación principal en Next.js para la web pública, catálogo, planner y captación de solicitudes.
 
-## Tech Stack
-- **Next.js 14** (App Router)
-- **TypeScript**
-- **Tailwind CSS**
-- **React-Konva** (Canvas 2D)
-- **Lucide React** (Iconos)
+## Desarrollo local
 
-## Configuración Local
+1. Copiar `.env.example` a `.env.local`.
+2. Configurar `DATABASE_URL` y `DATABASE_URL_DIRECT` con el proyecto Supabase.
+3. Ejecutar `npm install` y `npm run dev`.
 
-1. **Instalar dependencias:**
-   ```bash
-   npm install
-   ```
+Las variables de email pueden permanecer vacías. El sistema registra las solicitudes igualmente y omite el envío hasta que el PO configure Resend, el dominio y las cuentas corporativas.
 
-2. **Configurar variables de entorno:**
-   Copia `.env.example` a `.env` y asegúrate de que `NEXT_PUBLIC_API_BASE_URL` apunta a tu backend corriendo localmente (por defecto `http://localhost:8000/api/v1`).
+## Arquitectura activa
 
-3. **Ejecutar en modo desarrollo:**
-   ```bash
-   npm run dev
-   ```
+- Next.js App Router.
+- Supabase Postgres.
+- Acceso a datos exclusivamente desde servidor mediante `DATABASE_URL`.
+- `POST /api/quote-requests` para captación de leads.
+- Vercel como plataforma de despliegue.
 
-4. **Uso:**
-   - Regístrate o entra con tu usuario.
-   - Crea un proyecto en el Dashboard.
-   - En el Editor:
-     - Arrastra muebles desde el catálogo (izquierda).
-     - Muévelos (se ajustarán al grid de 20px).
-     - Rótalos o duplícalos desde el panel derecho.
-     - Observa cómo el presupuesto se actualiza en tiempo real al guardar.
+No se utiliza el backend FastAPI ni `NEXT_PUBLIC_API_BASE_URL`.
 
-## Características Implementadas
-- **Auth JWT:** Gestión de tokens y protección de rutas.
-- **Canvas 2D:** Stage reactivo con KonvaJS.
-- **Drag & Drop:** Integración nativa del navegador con Konva.
-- **Autosave:** Cada 5 segundos si hay cambios detectados.
-- **Pricing:** El resumen del panel derecho muestra los datos recalculados por el backend.
-- **Cookies:** Banner global de consentimiento + política en `/cookies`.
+## Validación
 
-## Cookies (Rodorte Base)
-- Componente global: `components/CookieConsentBanner.tsx`
-- Persistencia: `lib/cookie-consent.ts`
-- Política legal: `app/cookies/page.tsx`
-- Plantilla reusable para futuros proyectos: `COOKIE_TEMPLATE_RODORTE.md`
+```bash
+node --test tests/catalog.test.mjs tests/landing-nav.test.mjs tests/quote-requests.test.mjs tests/production-hardening.test.mjs
+npx tsc --noEmit
+```
+
+El build local sobre el volumen Windows `F:` puede fallar por un problema conocido de `fs.readlink`; el build remoto de Vercel es la puerta de despliegue autoritativa.

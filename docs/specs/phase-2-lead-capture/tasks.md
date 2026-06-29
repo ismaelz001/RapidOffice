@@ -35,9 +35,9 @@
 
 ## 2.5 Catálogo / reacondicionado
 
-- [ ] Revisar si la página `frontend/app/mobiliario/page.tsx` necesita formulario propio o basta con CTA a categorías.
-- [ ] Si se añade, usar `source = catalog`.
-- [ ] Para productos reacondicionados, usar `source = refurbished` cuando aplique.
+- [x] Mantener un único formulario reutilizable y enlazar desde cada producto con su SKU.
+- [x] Guardar producto y cantidad en `quote_request_items`.
+- [x] Para productos reacondicionados, usar `source = refurbished`.
 
 ## 2.6 Planner
 
@@ -60,3 +60,12 @@
 - [x] Actualizar `ROADMAP.md`.
 - [x] Actualizar `docs/ROADMAP.md`.
 - [x] Marcar solo lo realmente terminado.
+
+## 2.9 Hardening y correo preparado
+
+- [x] Retirar credenciales y dashboard demo del frontend público.
+- [x] Redirigir rutas legacy hasta construir el CRM real.
+- [x] Retirar datos de contacto ficticios y enlaces legales vacíos.
+- [x] Añadir icono de aplicación.
+- [x] Preparar Resend con variables de entorno, sin activarlo hasta el setup del PO.
+- [x] Actualizar ADR 0004 con el acceso real a Supabase.

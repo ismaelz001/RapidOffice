@@ -540,12 +540,6 @@ export default function OfiponentePage() {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href="/login"
-              className="text-sm font-semibold border border-ofi-black/15 px-4 py-2 text-ofi-black transition-colors duration-200 hover:border-ofi-pink hover:text-ofi-pink-dark"
-            >
-              Acceso<span className="hidden sm:inline"> CRM</span>
-            </a>
-            <a
               href="/planifica-tu-espacio/"
               className="text-sm font-semibold bg-ofi-black text-ofi-white px-4 py-2 hover:bg-ofi-pink-dark transition-colors duration-200 sm:px-5"
             >
@@ -904,21 +898,12 @@ export default function OfiponentePage() {
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-xs font-semibold tracking-wider text-ofi-gray uppercase mb-2">Contacto</p>
-            <p className="text-sm text-ofi-gray">C/ Ejemplo, 14 · 04700 El Ejido</p>
-            <a href="mailto:info@ofiponiente.es" className="text-sm text-ofi-gray hover:text-ofi-pink-dark transition-colors">info@ofiponiente.es</a>
-            <a href="tel:+34950000000" className="text-sm text-ofi-gray hover:text-ofi-pink-dark transition-colors">950 000 000</a>
+            <p className="text-sm text-ofi-gray">Atención a empresas en toda España.</p>
+            <a href="#contacto" className="text-sm font-semibold text-ofi-pink-dark hover:text-ofi-black transition-colors">Solicitar una propuesta</a>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-xs font-semibold tracking-wider text-ofi-gray uppercase mb-2">Legal</p>
-            <a href="#" className="text-sm text-ofi-gray hover:text-ofi-black transition-colors">Aviso legal</a>
-            <a href="#" className="text-sm text-ofi-gray hover:text-ofi-black transition-colors">Política de privacidad</a>
-            <a
-              href="/login"
-              className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-ofi-black px-4 py-2.5 text-sm font-semibold text-ofi-white transition hover:bg-ofi-pink-dark"
-            >
-              Acceso CRM
-              <span aria-hidden="true">→</span>
-            </a>
+            <a href="/cookies" className="text-sm text-ofi-gray hover:text-ofi-black transition-colors">Política de cookies</a>
           </div>
         </footer>
         <div className="px-8 md:px-12 py-4 flex items-center justify-between text-xs text-ofi-gray/40 border-t border-ofi-black/5">

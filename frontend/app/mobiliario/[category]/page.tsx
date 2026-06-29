@@ -8,6 +8,7 @@ import {
   formatPrice,
   getCatalogProducts,
   getCategory,
+  getQuoteRequestHref,
   getRefurbishedProducts,
   refurbishedFilterCategories,
 } from '@/lib/catalog';
@@ -20,6 +21,7 @@ type PageProps = {
   };
   searchParams?: {
     familia?: string;
+    producto?: string;
   };
 };
 
@@ -41,6 +43,9 @@ export default async function CatalogCategoryPage({ params, searchParams }: Page
   const products = isRefurbishedView
     ? await getRefurbishedProducts(selectedFamily)
     : await getCatalogProducts(category.slug);
+  const selectedProduct = searchParams?.producto
+    ? products.find((product) => product.sku === searchParams.producto)
+    : undefined;
 
   return (
     <main className="min-h-screen bg-ofi-offwhite text-ofi-black">
@@ -163,12 +168,12 @@ export default async function CatalogCategoryPage({ params, searchParams }: Page
                   <p className="text-3xl font-bold">{formatPrice(product.priceCents)}</p>
                   <p className="mt-1 text-xs text-ofi-gray">{product.stockQty} uds. disponibles</p>
                 </div>
-                <a
-                  href={`/mobiliario/${category.slug}#presupuesto`}
+                <Link
+                  href={getQuoteRequestHref(product, isRefurbishedView)}
                   className="shrink-0 border border-ofi-black px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-ofi-black hover:text-white"
                 >
                   {CATALOG_CTA_LABEL}
-                </a>
+                </Link>
               </div>
             </div>
           </article>
@@ -184,9 +189,10 @@ export default async function CatalogCategoryPage({ params, searchParams }: Page
           </p>
         </div>
         <QuoteRequestForm
-          source="category"
-          context={`Categoría: ${category.name}${selectedFamilyLabel ? ` · Familia reacondicionado: ${selectedFamilyLabel}` : ''}`}
-          defaultMessage={`Me interesa ${category.name.toLowerCase()}...`}
+          source={isRefurbishedView ? 'refurbished' : 'category'}
+          context={`Categoría: ${category.name}${selectedFamilyLabel ? ` · Familia reacondicionado: ${selectedFamilyLabel}` : ''}${selectedProduct ? ` · Producto: ${selectedProduct.name} (${selectedProduct.sku})` : ''}`}
+          defaultMessage={selectedProduct ? `Me interesa ${selectedProduct.name}.` : `Me interesa ${category.name.toLowerCase()}...`}
+          item={selectedProduct ? { sku: selectedProduct.sku, name: selectedProduct.name } : undefined}
           submitLabel="Solicitar disponibilidad"
           formClassName="flex flex-col gap-4 bg-ofi-offwhite px-8 py-14 md:px-14"
           buttonClassName="bg-ofi-black px-5 py-3.5 text-left text-sm font-semibold text-white hover:bg-ofi-pink-dark disabled:opacity-60"

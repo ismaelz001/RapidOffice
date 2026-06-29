@@ -4,8 +4,8 @@
 
 | Campo | Valor |
 | --- | --- |
-| Estado | En preparación |
-| Fecha | 2026-06-26 |
+| Estado | Implementación completada; pendiente de validación final en producción |
+| Fecha | 2026-06-29 |
 | Roadmap | `ROADMAP.md`, `docs/ROADMAP.md` |
 | Fase previa | Fase 1 completada |
 
@@ -48,14 +48,25 @@ Existe:
 - Páginas de categoría en `frontend/app/mobiliario/[category]/page.tsx`.
 - Planner actual estático en `frontend/public/planifica-tu-espacio/index.html`.
 
-No existe todavía:
+Ya está implementado y validado:
 
-- Envío real de formularios a Supabase.
-- API/acción estable para crear solicitudes.
+- Endpoint estable para crear solicitudes desde Next.js.
+- Envío real desde Home, categoría y planner a Supabase.
 - UX de confirmación con número de solicitud.
-- Source tracking normalizado.
-- Persistencia del estado del planner.
-- Email automático de confirmación.
+- Source tracking para `home`, `category` y `planner`.
+- Persistencia del resumen comercial del planner.
+
+Implementado en el cierre:
+
+- Contexto de producto, cantidad y filas en `quote_request_items`.
+- Origen específico `refurbished` en su flujo de captación.
+- Preparación de email transaccional; el envío real queda pendiente del setup del PO.
+- Retirada de rutas, credenciales y datos ficticios del frontend legacy publicado.
+- Índice aditivo para consultar los ítems por solicitud.
+
+Pendiente únicamente de validación final:
+
+- Error y responsive móvil en el despliegue de producción.
 
 ## Alcance incluido
 
@@ -127,4 +138,3 @@ Si más adelante se decide migrar a `@supabase/supabase-js`, deberá documentars
 - Los errores se muestran sin perder el formulario.
 - TypeScript valida.
 - Tests existentes siguen pasando.
-

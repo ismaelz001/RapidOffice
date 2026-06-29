@@ -1,4 +1,4 @@
-# 0004 — Arquitectura backend: Supabase client-only, sin FastAPI
+# 0004 — Arquitectura backend: Next.js server-side + Supabase, sin FastAPI
 
 ## Estado
 
@@ -8,7 +8,9 @@ Aceptada.
 
 El proyecto Ofiponiente Digital **no usará un backend FastAPI propio** en el MVP ni en las fases comerciales previstas.
 
-Toda la lógica de datos se gestiona directamente desde Next.js mediante el cliente oficial de Supabase (`@supabase/supabase-js`).
+La lógica de datos del MVP se gestiona desde Next.js. Las lecturas y escrituras sensibles se ejecutan en servidor contra Supabase Postgres mediante `postgres` y `DATABASE_URL`.
+
+No se exponen credenciales de base de datos al navegador. Las API Routes de Next.js validan los datos del cliente y ejecutan las operaciones comerciales.
 
 El backend FastAPI original ha sido archivado en `docs/archive/legacy-backend/`.
 
@@ -25,11 +27,13 @@ El proyecto arrancó con un prototipo FastAPI + SQLAlchemy + Neon pensado para u
 
 - No se usará FastAPI, SQLAlchemy, Neon, JWT propio ni bcrypt en este proyecto.
 - La autenticación de panel interno se gestionará con Supabase Auth si fuera necesaria.
-- Las API Routes de Next.js (`app/api/`) se usarán solo para operaciones que no puedan ejecutarse en cliente (webhooks, emails, firmas de URL).
-- El archivo `render.yaml` queda obsoleto para el backend; puede eliminarse en una limpieza futura si no se usa para otro servicio.
+- Las API Routes de Next.js (`app/api/`) se usarán para escrituras sensibles, webhooks, emails y otras operaciones exclusivamente de servidor.
+- `DATABASE_URL` y `DATABASE_URL_DIRECT` son variables exclusivamente de servidor.
+- El archivo `render.yaml` del backend legacy queda eliminado.
 - Si en el futuro se necesita lógica de servidor compleja, se evaluará en ese momento con nueva decisión documentada.
 
 ## Archivos afectados
 
 - `docs/archive/legacy-backend/backend/` — código archivado, solo referencia.
-- `.env.local` — eliminar variables `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM` si aún existen.
+- `frontend/.env.local` — conservar `DATABASE_URL` solo en servidor; nunca usar prefijo `NEXT_PUBLIC_`.
+- `SECRET_KEY`, `ALGORITHM` y `NEXT_PUBLIC_API_BASE_URL` pertenecían al backend legacy y no forman parte de la arquitectura activa.

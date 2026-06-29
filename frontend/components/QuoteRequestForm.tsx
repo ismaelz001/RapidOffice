@@ -5,6 +5,10 @@ import { FormEvent, useState } from 'react';
 type QuoteRequestFormProps = {
   source: 'home' | 'catalog' | 'category' | 'refurbished' | 'planner';
   context?: string;
+  item?: {
+    sku: string;
+    name: string;
+  };
   defaultMessage?: string;
   submitLabel?: string;
   formClassName?: string;
@@ -20,6 +24,7 @@ type SubmitState =
 export default function QuoteRequestForm({
   source,
   context,
+  item,
   defaultMessage = '',
   submitLabel = 'Enviar solicitud',
   formClassName = 'flex flex-col gap-4 max-w-sm w-full',
@@ -37,6 +42,9 @@ export default function QuoteRequestForm({
     const phone = String(formData.get('phone') ?? '').trim();
     const company = String(formData.get('company') ?? '').trim();
     const message = String(formData.get('message') ?? '').trim();
+    const website = String(formData.get('website') ?? '').trim();
+    const quantityValue = Number(formData.get('quantity') ?? 1);
+    const quantity = Number.isInteger(quantityValue) ? Math.min(Math.max(quantityValue, 1), 100) : 1;
 
     if (!customerName || (!email && !phone)) {
       setState({ status: 'error', message: 'Indica tu nombre y al menos un email o teléfono.' });
@@ -58,6 +66,8 @@ export default function QuoteRequestForm({
           source,
           context,
           pageUrl: window.location.href,
+          items: item ? [{ sku: item.sku, quantity }] : [],
+          website,
         }),
       });
       const result = await response.json();
@@ -82,6 +92,17 @@ export default function QuoteRequestForm({
 
   return (
     <form className={formClassName} onSubmit={handleSubmit}>
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor={`${source}-quote-website`}>Sitio web</label>
+        <input
+          id={`${source}-quote-website`}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div data-cta className="flex flex-col gap-1">
         <label htmlFor={`${source}-quote-name`} className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">
           Nombre
@@ -126,6 +147,26 @@ export default function QuoteRequestForm({
       </div>
 
       <input name="company" type="hidden" value="" readOnly />
+
+      {item ? (
+        <div data-cta className="border border-ofi-pink/25 bg-white px-4 py-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-ofi-pink-dark">Producto seleccionado</p>
+          <p className="mt-1 text-sm font-semibold text-ofi-black">{item.name}</p>
+          <p className="mt-1 text-xs text-ofi-gray">{item.sku}</p>
+          <label htmlFor={`${source}-quote-quantity`} className="mt-3 block text-xs font-semibold uppercase tracking-wider text-ofi-gray">
+            Unidades
+          </label>
+          <input
+            id={`${source}-quote-quantity`}
+            name="quantity"
+            type="number"
+            min={1}
+            max={100}
+            defaultValue={1}
+            className="mt-1 w-24 border border-ofi-black/20 bg-transparent px-3 py-2 text-sm focus:border-ofi-pink focus:outline-none"
+          />
+        </div>
+      ) : null}
 
       <div data-cta className="flex flex-col gap-1">
         <label htmlFor={`${source}-quote-message`} className="text-xs font-semibold text-ofi-gray uppercase tracking-wider">

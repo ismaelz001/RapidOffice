@@ -1,8 +1,8 @@
 # Ofiponiente Digital — Status & Roadmap
 
-**¿Dónde estamos?** Fase 1 ✅ completada. Arquitectura limpia, decidida y documentada.
+**¿Dónde estamos?** Fase 1 ✅ completada. Fase 2 tiene la implementación completa y está pendiente únicamente de validación final en producción.
 
-**¿Qué sigue?** Fase 2 → captación real de leads (formularios → Supabase).
+**¿Qué sigue?** Validar el despliegue y abrir Fase 3: CRM interno real sobre los leads capturados.
 
 **Aparcado explícitamente:** `planificaciondeoficinas.com`. El PO avisará cuándo el dominio esté listo. Hasta entonces no se configura dominio, deploy ni proyecto separado.
 
@@ -13,7 +13,7 @@
 | Fase | Estado | Descripción | Timeline |
 |------|--------|-------------|----------|
 | **1** | ✅ DONE | Limpieza arquitectónica, archivar legacy backend/prototipo local | Completado |
-| **2** | 🔄 IN PROGRESS | Lead capture (formularios → Supabase quote_requests) | 1-2 sprints |
+| **2** | 🔄 95% | Lead capture y trazabilidad comercial | Validación final |
 | **3** | ⏳ PLAN | CRM interno (dashboard de leads, seguimiento) | 1 sprint |
 | **4** | ⏳ PLAN | Páginas de productos individuales | 1-2 sprints |
 | **5** | ⏳ PLAN | Páginas de categorías mejoradas | 1 sprint |
@@ -22,7 +22,7 @@
 | **8** | ⏳ PLAN | Email automation + seguimiento | 1 sprint |
 | **9** | ⏳ PLAN | Analytics avanzado + reportes KPI | 1-2 sprints |
 
-**MVP: 60% → 70% (post-Fase 1)**
+**MVP comercial inicial:** ~75%. La captación y trazabilidad existen; el siguiente bloque es el CRM interno.
 
 ---
 
@@ -41,7 +41,7 @@
 ✅ Backend FastAPI → docs/archive/legacy-backend/
 ✅ Prototipo local planificacion-de-oficinas → docs/archive/planificacion-de-oficinas/
 ⏸️ Dominio planificaciondeoficinas.com → aparcado hasta aviso del PO
-✅ ADR 0004: Backend Architecture (Supabase client-only)
+⚠️ ADR 0004: requiere alinear la redacción con el acceso actual mediante `postgres` + `DATABASE_URL`
 ✅ ADR 0005: planificaciondeoficinas.com como dominio futuro aparcado
 ✅ 8/8 agents auditados (sin refs FastAPI/Neon)
 ✅ docs/ auditado (refs legacy solo en archivos históricos)
@@ -50,19 +50,21 @@
 
 ---
 
-## 🔄 Fase 2 — Por empezar
+## 🔄 Fase 2 — Implementación completa (95%, pendiente E2E)
 
 **Spec operativa:** [docs/specs/phase-2-lead-capture/](docs/specs/phase-2-lead-capture/)
 
 **Qué hacer:**
 - [x] Conectar home CTA → form → `quote_requests` Supabase
 - [x] Conectar categorías → "Solicitar presupuesto" → `quote_requests`
-- [ ] Conectar catálogo/reacondicionado global → "Solicitar presupuesto" → `quote_requests` si hace falta
+- [x] Conectar catálogo/reacondicionado con contexto real de producto y origen correcto
 - [x] Guardar planner state → `quote_requests` como resumen comercial
-- [ ] Guardar productos concretos → `quote_request_items` cuando existan `product_id`
+- [x] Guardar productos concretos → `quote_request_items` resolviendo SKU en servidor
 - [x] Source tracking (home / categoría / planner)
-- [ ] Email de confirmación automático
-- [ ] UX de éxito (toast + número de solicitud)
+- [x] Dejar preparada la integración de email; activación, dominio y remitentes quedan pendientes del setup del PO
+- [x] UX de éxito inline con número de solicitud
+- [ ] Validar error y responsive móvil en navegador
+- [x] Retirar de producción CRM demo, credenciales públicas, contacto ficticio y enlaces legales vacíos
 
 **Qué NO se hace en Fase 2:**
 - No configurar `planificaciondeoficinas.com`.
@@ -77,9 +79,17 @@
 - `frontend/public/planifica-tu-espacio/index.html` — planner actual estático
 
 **Validación:**
-- 3 formularios probados en dev
-- Datos llegan a Supabase
-- Email de confirmación funciona
+- [x] Home, categoría y planner probados en producción
+- [x] Datos confirmados en Supabase y registros TEST eliminados
+- [x] Tests y TypeScript validados en el último cierre técnico
+- [ ] Navegador sin errores de consola (`/favicon.ico` devuelve 404 actualmente)
+- [ ] Email preparado en código; envío real se validará cuando el PO configure proveedor, dominio y cuentas
+
+**Riesgos P0 resueltos en el cierre:**
+- Rutas legacy redirigidas y credenciales demo retiradas.
+- Contacto ficticio y enlaces vacíos retirados.
+- CTA de producto conserva SKU y cantidad; la API crea `quote_request_items` de forma transaccional.
+- Email preparado y desactivado de forma segura mientras falte configuración corporativa.
 
 ---
 
@@ -105,5 +115,5 @@
 
 ---
 
-**Última actualización:** 2026-06-26 (Fase 2 en curso)
-**Próximo checkpoint:** Después de Fase 2
+**Última actualización:** 2026-06-29 (auditoría de estado real)
+**Próximo checkpoint:** Validación E2E del despliegue y apertura de Fase 3

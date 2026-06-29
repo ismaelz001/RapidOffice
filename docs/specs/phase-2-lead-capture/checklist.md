@@ -22,10 +22,10 @@
 ## UX
 
 - [x] No mostrar precios falsos en pasos tempranos del planner.
-- [ ] Mantener CTA claro.
+- [x] Mantener CTA claro.
 - [x] Mostrar éxito.
-- [ ] Mostrar error entendible.
-- [ ] No perder los datos del formulario si falla.
+- [x] Mostrar error entendible en el componente.
+- [x] No perder los datos del formulario si falla.
 - [ ] Revisar móvil.
 
 ## Seguridad
@@ -39,10 +39,12 @@
 
 - [x] `node --test tests/catalog.test.mjs tests/landing-nav.test.mjs`
 - [x] `npx tsc --noEmit`
-- [ ] Home probado.
-- [ ] Categoría probada.
+- [x] Home probado en producción (2026-06-29).
+- [x] Categoría probada en producción (2026-06-29).
 - [x] Planner probado.
 - [x] Supabase revisado.
+- [x] Registros TEST de validación eliminados.
+- [ ] Consola de navegador sin errores (`favicon.ico` pendiente).
 
 ## Cierre
 

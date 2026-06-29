@@ -363,6 +363,20 @@ export function formatPrice(cents: number) {
   }).format(cents / 100);
 }
 
+export function getQuoteRequestHref(product: CatalogProduct, refurbishedView = false) {
+  const useRefurbishedRoute = refurbishedView || product.condition === 'reacondicionado';
+  const route = useRefurbishedRoute
+    ? '/mobiliario/reacondicionado'
+    : `/mobiliario/${product.categorySlug}`;
+  const params = new URLSearchParams({ producto: product.sku });
+
+  if (useRefurbishedRoute) {
+    params.set('familia', product.categorySlug);
+  }
+
+  return `${route}?${params.toString()}#presupuesto`;
+}
+
 export function getCategory(slug: string) {
   return catalogCategories.find((category) => category.slug === slug);
 }

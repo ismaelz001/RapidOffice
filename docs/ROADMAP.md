@@ -2,7 +2,7 @@
 
 **Proyecto:** Plataforma B2B SaaS para venta de mobiliario de oficina y soluciones de espacios de trabajo.
 **Stack:** Next.js 14.0.4 + Supabase + Tailwind CSS
-**Versión:** Roadmap 1.0 (actualizado 2026-06-25)
+**Versión:** Roadmap 1.1 (actualizado 2026-06-29)
 
 ---
 
@@ -10,7 +10,7 @@
 
 ```
 Fase 1: [████████████████] 100% ✅ COMPLETADA
-Fase 2: [██████████░░░░░░] 60%
+Fase 2: [███████████████░] 95% — validación final
 Fase 3: [░░░░░░░░░░░░░░░░] 0%
 Fase 4: [░░░░░░░░░░░░░░░░] 0%
 Fase 5: [░░░░░░░░░░░░░░░░] 0%
@@ -19,7 +19,7 @@ Fase 7: [░░░░░░░░░░░░░░░░] 0%
 Fase 8: [░░░░░░░░░░░░░░░░] 0%
 Fase 9: [░░░░░░░░░░░░░░░░] 0%
 
-Total MVP: 60% → 70% (post-Fase1)
+MVP comercial inicial: ~75% (captación y trazabilidad implementadas)
 ```
 
 ---
@@ -40,7 +40,7 @@ Total MVP: 60% → 70% (post-Fase1)
 
 ### Resultado:
 ✅ **Arquitectura clara, decidida, documentada.**
-✅ **Ninguna deuda técnica bloqueante en el código activo.**
+⚠️ **La auditoría del 2026-06-29 detectó frontend legacy activo; su retirada se incorpora al cierre de Fase 2.**
 ✅ **ADRs disponibles para futuras decisiones.**
 ⏸️ **`planificaciondeoficinas.com` queda fuera del alcance activo hasta nueva instrucción del PO.**
 
@@ -67,12 +67,13 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 - [x] Conectar home CTA form → `quote_requests` table
 - [x] Conectar categorías → inline "Solicitar presupuesto" button
 - [x] Conectar categoría page → "Presupuesto" form con contexto de categoría
-- [ ] Conectar reacondicionado page → "Alerta de stock" form
+- [x] Conectar reacondicionado page con origen `refurbished`
+- [x] Conservar producto y cantidad al pulsar "Añadir a presupuesto"
 
 #### 2.2 — Persistencia del planner actual
 - [x] Evaluar si el HTML actual puede enviar un lead mínimo sin rediseño
 - [x] Guardar estado básico del planner en `quote_requests`
-- [ ] Guardar selección/productos si aplica en `quote_request_items`
+- [x] Guardar selección/productos en `quote_request_items`
 - [x] Mantener el diseño actual salvo ajuste mínimo necesario para enviar datos
 
 #### 2.3 — Source tracking + metadatos
@@ -81,10 +82,17 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 - [ ] Opcional: identificar usuario anónimo (cookie tracking)
 
 #### 2.4 — UX de confirmación
-- [ ] Toast/modal de éxito post-envío
-- [ ] Email de confirmación automático (Resend/SendGrid)
-- [ ] Mostrar número de solicitud al usuario
+- [x] Confirmación inline post-envío
+- [x] Preparar integración transaccional de email sin activarla hasta el setup del PO
+- [x] Mostrar número de solicitud al usuario
 - [ ] Página de "gracias" con next steps
+
+#### 2.5 — Hardening antes de cerrar la fase
+- [x] Retirar u ocultar `/login`, `/admin`, `/projects`, `/editor` y `/share` mientras no exista autenticación real.
+- [x] Eliminar credenciales de demo publicadas en cliente.
+- [x] Sustituir u ocultar dirección, teléfono y enlaces legales ficticios.
+- [x] Añadir icono de aplicación para dejar la consola de producción limpia.
+- [x] Alinear ADR 0004 con el acceso real a Supabase.
 
 ### Archivos a modificar:
 ```
@@ -103,9 +111,11 @@ frontend/lib/catalog.ts                     — revisar acceso a Supabase si hac
 - Implementar pagos o anticipo 50%.
 
 ### Validación:
-- `npm run dev` → test 3 formularios en navegador
-- Verificar datos en Supabase Dashboard
-- Email de confirmación llega correctamente
+- [x] Home, categoría y planner probados en producción
+- [x] Filas verificadas en Supabase y datos TEST eliminados
+- [x] Confirmación con número visible
+- [ ] Error y responsive móvil probados en navegador
+- [ ] Email real validado cuando el PO configure proveedor, dominio y remitentes
 
 ---
 
@@ -449,5 +459,5 @@ Total: 12 semanas (3 meses) para MVP completo y optimizado
 
 ---
 
-**Última actualización:** 2026-06-26
-**Próxima revisión:** Después de completar Fase 2
+**Última actualización:** 2026-06-29
+**Próxima revisión:** Después del hardening de producción y cierre de trazabilidad de producto

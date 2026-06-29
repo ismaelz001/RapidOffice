@@ -49,7 +49,7 @@ test('home and category pages use the real quote request form', async () => {
   assert.doesNotMatch(homeSource, /onSubmit=\{e => e\.preventDefault\(\)\}/);
 
   assert.match(categorySource, /QuoteRequestForm/);
-  assert.match(categorySource, /source="category"/);
+  assert.match(categorySource, /source=\{isRefurbishedView \? 'refurbished' : 'category'\}/);
   assert.doesNotMatch(categorySource, /type="button" className="bg-ofi-black/);
 });
 
@@ -65,4 +65,51 @@ test('planner submits its configuration as a quote request', async () => {
   assert.doesNotMatch(plannerSource, /state\.reunion\.personas/);
   assert.match(plannerSource, /localStorage\.setItem\('ofi_config'/);
   assert.match(plannerSource, /result-request-id/);
+});
+
+test('selected catalogue products are persisted as quote request items', async () => {
+  const routeSource = await read('app/api/quote-requests/route.ts');
+  const formSource = await read('components/QuoteRequestForm.tsx');
+  const categorySource = await read('app/mobiliario/[category]/page.tsx');
+  const catalogPageSource = await read('app/mobiliario/page.tsx');
+
+  assert.match(routeSource, /quote_request_items/);
+  assert.match(routeSource, /catalog_products/);
+  assert.match(routeSource, /sql\.begin/);
+  assert.match(routeSource, /quantity/);
+  assert.match(formSource, /items:/);
+  assert.match(formSource, /name="quantity"/);
+  assert.match(categorySource, /searchParams\?\.producto/);
+  assert.match(categorySource, /source=\{isRefurbishedView \? 'refurbished' : 'category'\}/);
+  assert.match(catalogPageSource, /getQuoteRequestHref/);
+});
+
+test('transactional emails are prepared but disabled without company setup', async () => {
+  const emailUrl = new URL('lib/email/quote-request-email.ts', root);
+  assert.equal(existsSync(emailUrl), true, 'quote request email module is missing');
+
+  const emailSource = await read('lib/email/quote-request-email.ts');
+  const routeSource = await read('app/api/quote-requests/route.ts');
+  const envExample = await read('.env.example');
+
+  assert.match(emailSource, /RESEND_API_KEY/);
+  assert.match(emailSource, /EMAIL_FROM/);
+  assert.match(emailSource, /SALES_NOTIFICATION_EMAIL/);
+  assert.match(emailSource, /Idempotency-Key/);
+  assert.match(emailSource, /https:\/\/api\.resend\.com\/emails/);
+  assert.match(routeSource, /sendQuoteRequestEmails/);
+  assert.match(envExample, /RESEND_API_KEY=/);
+  assert.match(envExample, /EMAIL_FROM=/);
+  assert.match(envExample, /SALES_NOTIFICATION_EMAIL=/);
+});
+
+test('public quote endpoint limits payload size and rejects the honeypot', async () => {
+  const routeSource = await read('app/api/quote-requests/route.ts');
+  const formSource = await read('components/QuoteRequestForm.tsx');
+
+  assert.match(routeSource, /request\.text\(\)/);
+  assert.match(routeSource, /status:\s*413/);
+  assert.match(routeSource, /payload\.website/);
+  assert.match(formSource, /name="website"/);
+  assert.match(formSource, /aria-hidden="true"/);
 });

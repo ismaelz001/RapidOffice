@@ -5,6 +5,7 @@ import {
   catalogCategories,
   formatPrice,
   getCatalogProducts,
+  getQuoteRequestHref,
 } from '@/lib/catalog';
 
 export const dynamic = 'force-dynamic';
@@ -81,7 +82,7 @@ export default async function CatalogIndexPage() {
                     <p className="text-2xl font-bold">{formatPrice(product.priceCents)}</p>
                     <p className="text-xs text-ofi-gray">{product.stockQty} uds. disponibles</p>
                   </div>
-                  <Link href={`/mobiliario/${product.categorySlug}`} className="border border-ofi-black px-4 py-2 text-sm font-semibold hover:bg-ofi-black hover:text-white">
+                  <Link href={getQuoteRequestHref(product)} className="border border-ofi-black px-4 py-2 text-sm font-semibold hover:bg-ofi-black hover:text-white">
                     {CATALOG_CTA_LABEL}
                   </Link>
                 </div>
