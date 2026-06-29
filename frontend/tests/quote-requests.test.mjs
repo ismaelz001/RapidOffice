@@ -81,6 +81,7 @@ test('selected catalogue products are persisted as quote request items', async (
   assert.match(formSource, /name="quantity"/);
   assert.match(categorySource, /searchParams\?\.producto/);
   assert.match(categorySource, /source=\{isRefurbishedView \? 'refurbished' : 'category'\}/);
+  assert.match(categorySource, /key=\{selectedProduct\?\.sku \?\? 'category'\}/);
   assert.match(catalogPageSource, /getQuoteRequestHref/);
 });
 

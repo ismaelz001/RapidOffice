@@ -189,6 +189,7 @@ export default async function CatalogCategoryPage({ params, searchParams }: Page
           </p>
         </div>
         <QuoteRequestForm
+          key={selectedProduct?.sku ?? 'category'}
           source={isRefurbishedView ? 'refurbished' : 'category'}
           context={`Categoría: ${category.name}${selectedFamilyLabel ? ` · Familia reacondicionado: ${selectedFamilyLabel}` : ''}${selectedProduct ? ` · Producto: ${selectedProduct.name} (${selectedProduct.sku})` : ''}`}
           defaultMessage={selectedProduct ? `Me interesa ${selectedProduct.name}.` : `Me interesa ${category.name.toLowerCase()}...`}
