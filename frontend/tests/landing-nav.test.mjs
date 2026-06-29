@@ -52,6 +52,14 @@ test('planner preview includes a visible link back to the home page', async () =
   assert.match(published, /Volver a Ofiponiente/);
 });
 
+test('planner preview declares the production application icon', async () => {
+  const published = await readFile(
+    new URL('../public/planifica-tu-espacio/index.html', import.meta.url),
+    'utf8',
+  );
+  assert.match(published, /<link rel="icon" href="\/icon\.svg"/);
+});
+
 test('planner preview does not show price estimates in the first steps', async () => {
   const published = await readFile(
     new URL('../public/planifica-tu-espacio/index.html', import.meta.url),
