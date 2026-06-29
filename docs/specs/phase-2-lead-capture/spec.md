@@ -4,7 +4,7 @@
 
 | Campo | Valor |
 | --- | --- |
-| Estado | Implementación completada; pendiente de validación final en producción |
+| Estado | Completada |
 | Fecha | 2026-06-29 |
 | Roadmap | `ROADMAP.md`, `docs/ROADMAP.md` |
 | Fase previa | Fase 1 completada |
@@ -64,9 +64,15 @@ Implementado en el cierre:
 - Retirada de rutas, credenciales y datos ficticios del frontend legacy publicado.
 - Índice aditivo para consultar los ítems por solicitud.
 
-Pendiente únicamente de validación final:
+Validación final completada:
 
-- Error y responsive móvil en el despliegue de producción.
+- Error conserva los datos del formulario.
+- Responsive móvil probado a 390 × 844 px.
+- Solicitud reacondicionada guardada con SKU y cantidad correctos.
+- Confirmación visible con número de solicitud.
+- Honeypot y límite de payload verificados sin generar filas.
+- Registros TEST eliminados y cascada de ítems confirmada.
+- Consola limpia en los recorridos normales.
 
 ## Alcance incluido
 

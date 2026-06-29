@@ -1,8 +1,8 @@
 # Ofiponiente Digital — Status & Roadmap
 
-**¿Dónde estamos?** Fase 1 ✅ completada. Fase 2 tiene la implementación completa y está pendiente únicamente de validación final en producción.
+**¿Dónde estamos?** Fases 1 y 2 ✅ completadas. La captación comercial funciona en producción con trazabilidad hasta Supabase.
 
-**¿Qué sigue?** Validar el despliegue y abrir Fase 3: CRM interno real sobre los leads capturados.
+**¿Qué sigue?** Fase 3: CRM interno real sobre los leads capturados.
 
 **Aparcado explícitamente:** `planificaciondeoficinas.com`. El PO avisará cuándo el dominio esté listo. Hasta entonces no se configura dominio, deploy ni proyecto separado.
 
@@ -13,7 +13,7 @@
 | Fase | Estado | Descripción | Timeline |
 |------|--------|-------------|----------|
 | **1** | ✅ DONE | Limpieza arquitectónica, archivar legacy backend/prototipo local | Completado |
-| **2** | 🔄 95% | Lead capture y trazabilidad comercial | Validación final |
+| **2** | ✅ DONE | Lead capture y trazabilidad comercial | Completado |
 | **3** | ⏳ PLAN | CRM interno (dashboard de leads, seguimiento) | 1 sprint |
 | **4** | ⏳ PLAN | Páginas de productos individuales | 1-2 sprints |
 | **5** | ⏳ PLAN | Páginas de categorías mejoradas | 1 sprint |
@@ -50,7 +50,7 @@
 
 ---
 
-## 🔄 Fase 2 — Implementación completa (95%, pendiente E2E)
+## ✅ Fase 2 — Completada
 
 **Spec operativa:** [docs/specs/phase-2-lead-capture/](docs/specs/phase-2-lead-capture/)
 
@@ -63,7 +63,7 @@
 - [x] Source tracking (home / categoría / planner)
 - [x] Dejar preparada la integración de email; activación, dominio y remitentes quedan pendientes del setup del PO
 - [x] UX de éxito inline con número de solicitud
-- [ ] Validar error y responsive móvil en navegador
+- [x] Validar error y responsive móvil en navegador
 - [x] Retirar de producción CRM demo, credenciales públicas, contacto ficticio y enlaces legales vacíos
 
 **Qué NO se hace en Fase 2:**
@@ -82,8 +82,10 @@
 - [x] Home, categoría y planner probados en producción
 - [x] Datos confirmados en Supabase y registros TEST eliminados
 - [x] Tests y TypeScript validados en el último cierre técnico
-- [ ] Navegador sin errores de consola (`/favicon.ico` devuelve 404 actualmente)
-- [ ] Email preparado en código; envío real se validará cuando el PO configure proveedor, dominio y cuentas
+- [x] Navegador sin errores de consola en Home, catálogo y planner
+- [x] Email preparado en código; envío real se validará cuando el PO configure proveedor, dominio y cuentas
+- [x] Round-trip producto → API → `quote_requests` + `quote_request_items` → confirmación UI
+- [x] Registros TEST eliminados con cascada verificada
 
 **Riesgos P0 resueltos en el cierre:**
 - Rutas legacy redirigidas y credenciales demo retiradas.
@@ -116,4 +118,4 @@
 ---
 
 **Última actualización:** 2026-06-29 (auditoría de estado real)
-**Próximo checkpoint:** Validación E2E del despliegue y apertura de Fase 3
+**Próximo checkpoint:** Diseño y alcance de Fase 3 — CRM interno

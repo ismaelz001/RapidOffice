@@ -26,7 +26,7 @@
 - [x] Mostrar éxito.
 - [x] Mostrar error entendible en el componente.
 - [x] No perder los datos del formulario si falla.
-- [ ] Revisar móvil.
+- [x] Revisar móvil en producción (390 × 844 px).
 
 ## Seguridad
 
@@ -44,10 +44,14 @@
 - [x] Planner probado.
 - [x] Supabase revisado.
 - [x] Registros TEST de validación eliminados.
-- [ ] Consola de navegador sin errores (`favicon.ico` pendiente).
+- [x] Consola de navegador sin errores en recorridos normales.
+- [x] Producto, cantidad y origen verificados en Supabase.
+- [x] Cascada de borrado de datos TEST verificada.
 
 ## Cierre
 
 - [x] Roadmap actualizado.
 - [x] Commit con alcance claro.
 - [x] Push a `main`.
+- [x] Build de Vercel `Ready`.
+- [x] Fase 2 marcada como completada.

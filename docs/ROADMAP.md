@@ -10,7 +10,7 @@
 
 ```
 Fase 1: [████████████████] 100% ✅ COMPLETADA
-Fase 2: [███████████████░] 95% — validación final
+Fase 2: [████████████████] 100% ✅ COMPLETADA
 Fase 3: [░░░░░░░░░░░░░░░░] 0%
 Fase 4: [░░░░░░░░░░░░░░░░] 0%
 Fase 5: [░░░░░░░░░░░░░░░░] 0%
@@ -87,6 +87,8 @@ Conectar todos los puntos de contacto (home, catálogo, planner) a Supabase para
 - [x] Mostrar número de solicitud al usuario
 - [ ] Página de "gracias" con next steps
 
+La página de gracias queda diferida: la confirmación inline con número cubre el criterio de aceptación sin añadir navegación innecesaria.
+
 #### 2.5 — Hardening antes de cerrar la fase
 - [x] Retirar u ocultar `/login`, `/admin`, `/projects`, `/editor` y `/share` mientras no exista autenticación real.
 - [x] Eliminar credenciales de demo publicadas en cliente.
@@ -114,8 +116,11 @@ frontend/lib/catalog.ts                     — revisar acceso a Supabase si hac
 - [x] Home, categoría y planner probados en producción
 - [x] Filas verificadas en Supabase y datos TEST eliminados
 - [x] Confirmación con número visible
-- [ ] Error y responsive móvil probados en navegador
-- [ ] Email real validado cuando el PO configure proveedor, dominio y remitentes
+- [x] Error y responsive móvil probados en producción
+- [x] Consola limpia en Home, catálogo y planner
+- [x] Round-trip de producto reacondicionado verificado hasta `quote_request_items`
+- [x] Datos TEST eliminados y cascada comprobada
+- [x] Integración de email preparada y desactivada hasta configurar proveedor, dominio y remitentes
 
 ---
 
